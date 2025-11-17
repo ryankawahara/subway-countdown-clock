@@ -1,23 +1,21 @@
 const GtfsRealtimeBindings = require('gtfs-realtime-bindings');
 const FeedMessage = GtfsRealtimeBindings.transit_realtime.FeedMessage;
 
-let cachedData = null; // Cache to store the latest data
-let lastUpdated = 0; // Timestamp of the last update
-
-// Function to fetch and cache the latest data
-const fetchLatestData = async () => {
+module.exports = async function handler(req, res) {
   const url = 'https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-ace';
 
   try {
+    // Fetch data from the MTA API
     const response = await fetch(url);
     if (!response.ok) {
-      console.error(`Failed to fetch: ${response.status}`);
+      res.status(response.status).json({ error: `Failed to fetch: ${response.status}` });
       return;
     }
 
+    // Convert response to ArrayBuffer and decode GTFS feed
     const arrayBuffer = await response.arrayBuffer();
     if (!arrayBuffer || arrayBuffer.byteLength === 0) {
-      console.error('Empty response from MTA API');
+      res.status(502).json({ error: 'Empty response from MTA API' });
       return;
     }
 
@@ -68,26 +66,10 @@ const fetchLatestData = async () => {
       station.trains.sort((a, b) => a.rawEta - b.rawEta);
     });
 
-    // Update the cache
-    cachedData = { stations };
-    lastUpdated = Date.now();
-    console.log('Data successfully updated at', new Date(lastUpdated).toLocaleTimeString());
+    res.status(200).json({ stations });
   } catch (err) {
-    console.error('Failed to fetch or parse MTA data:', err.message);
+    res.status(500).json({ error: 'Failed to decode GTFS feed', details: err.message });
   }
-};
-
-// Automatically fetch data every 60 seconds
-setInterval(fetchLatestData, 60 * 1000);
-fetchLatestData(); // Initial fetch
-
-// API handler to serve cached data
-module.exports = async function handler(req, res) {
-  if (!cachedData) {
-    res.status(503).json({ error: 'Data is not yet available. Please try again later.' });
-    return;
-  }
-  res.status(200).json(cachedData);
 };
 
 // Helper functions
