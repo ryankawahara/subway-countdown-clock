@@ -1,5 +1,6 @@
 const GtfsRealtimeBindings = require('gtfs-realtime-bindings');
 const FeedMessage = GtfsRealtimeBindings.transit_realtime.FeedMessage;
+const tripsData = require('./trips-data.json');
 
 module.exports = async function handler(req, res) {
   const url = 'https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-ace';
@@ -40,6 +41,8 @@ module.exports = async function handler(req, res) {
         const tripId = entity.tripUpdate.trip?.tripId;
         if (tripId && !tripIds.has(tripId)) {
           tripIds.add(tripId);
+          const tripKey = tripId.split('_').pop();
+          const destination = tripsData[tripKey] || "Unknown";
 
           entity.tripUpdate.stopTimeUpdate.forEach((stopTimeUpdate) => {
             const stopId = stopTimeUpdate.stopId;
@@ -58,6 +61,7 @@ module.exports = async function handler(req, res) {
 
                 stations[stopId].trains.push({
                   trainId,
+                  destination: destination,
                   eta: convertEpoch(departureTime),
                   minAway: secsToMins(timeDiff),
                   rawEta: timeDiff,
