@@ -8,7 +8,7 @@ export default function Home() {
   useEffect(() => {
     async function fetchMTA() {
       try {
-        const response = await fetch("/api/mta");
+        const response = await fetch("/api/mta?stations=A40N");
         const data = await response.json();
         console.log("MTA Feed JSON:", data); // Log the new data
         setMtaData(data); // Update state with the fetched data
@@ -21,7 +21,7 @@ export default function Home() {
     fetchMTA();
 
     // Set up an interval to fetch data every 30 seconds
-    const interval = setInterval(fetchMTA, 60 * 1000);
+    const interval = setInterval(fetchMTA, 30 * 1000);
 
     // Clean up the interval when the component unmounts
     return () => clearInterval(interval);

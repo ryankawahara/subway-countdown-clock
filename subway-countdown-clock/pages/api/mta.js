@@ -4,6 +4,14 @@ const FeedMessage = GtfsRealtimeBindings.transit_realtime.FeedMessage;
 module.exports = async function handler(req, res) {
   const url = 'https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-ace';
 
+  // Get the list of station IDs from the query parameter
+  const stationIds = req.query.stations ? req.query.stations.split(',') : null;
+
+  if (!stationIds || stationIds.length === 0) {
+    res.status(400).json({ error: 'Missing or invalid stations query parameter' });
+    return;
+  }
+
   try {
     // Fetch data from the MTA API
     const response = await fetch(url);
@@ -37,18 +45,18 @@ module.exports = async function handler(req, res) {
             const stopId = stopTimeUpdate.stopId;
             const departureTime = stopTimeUpdate.departure?.time;
 
-            if (stopId && departureTime) {
+            // Filter by the provided station IDs
+            if (stationIds.includes(stopId) && departureTime) {
               const timeDiff = departureTime - currentTime;
 
               if (timeDiff > 0) {
-                const stationName = stopId; // Replace with actual station name mapping if available
                 const trainId = entity.tripUpdate.trip.routeId;
 
-                if (!stations[stationName]) {
-                  stations[stationName] = { name: stationName, trains: [] };
+                if (!stations[stopId]) {
+                  stations[stopId] = { name: stopId, trains: [] };
                 }
 
-                stations[stationName].trains.push({
+                stations[stopId].trains.push({
                   trainId,
                   eta: convertEpoch(departureTime),
                   minAway: secsToMins(timeDiff),
@@ -61,7 +69,7 @@ module.exports = async function handler(req, res) {
       }
     });
 
-    // Sort trains by arrival time
+    // Sort trains by arrival time for each station
     Object.values(stations).forEach((station) => {
       station.trains.sort((a, b) => a.rawEta - b.rawEta);
     });
