@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 export default function Home() {
   const [mtaData, setMtaData] = useState<{
-    stations: Record<string, { trains: { trainId: string; rawEta: number; destination: string }[] }>;
+    stations: Record<string, { name: string; direction: string; trains: { trainId: string; rawEta: number; destination: string }[] }>;
   } | null>(null);
 
   useEffect(() => {
@@ -34,9 +34,18 @@ export default function Home() {
         <div className="mt-4">
           {mtaData ? (
             <div>
-              {Object.entries(mtaData.stations).map(([stationId, stationData]) => (
+              {Object.entries(mtaData.stations)
+                .sort(([a], [b]) => {
+                  // Sort so northbound (N) appears before southbound (S)
+                  const aDir = a.slice(-1);
+                  const bDir = b.slice(-1);
+                  if (aDir === 'N' && bDir === 'S') return -1;
+                  if (aDir === 'S' && bDir === 'N') return 1;
+                  return 0;
+                })
+                .map(([stationId, stationData]) => (
                 <div key={stationId} className="mb-8">
-                  <h2 className="text-xl font-semibold mb-4">Station: {stationId}</h2>
+                  <h2 className="text-xl font-semibold mb-4">{stationData.name} ({stationData.direction})</h2>
                   <ul className="space-y-2">
                     {stationData.trains.slice(0, 5).map((train, index) => (
                       <li

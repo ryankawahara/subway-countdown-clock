@@ -1,0 +1,1986 @@
+{
+  "R01": {
+    "north_direction_label": "Last Stop",
+    "south_direction_label": "Manhattan"
+  },
+  "R03": {
+    "north_direction_label": "Astoria",
+    "south_direction_label": "Manhattan"
+  },
+  "R04": {
+    "north_direction_label": "Astoria",
+    "south_direction_label": "Manhattan"
+  },
+  "R05": {
+    "north_direction_label": "Astoria",
+    "south_direction_label": "Manhattan"
+  },
+  "R06": {
+    "north_direction_label": "Astoria",
+    "south_direction_label": "Manhattan"
+  },
+  "R08": {
+    "north_direction_label": "Astoria",
+    "south_direction_label": "Manhattan"
+  },
+  "R11": {
+    "north_direction_label": "Queens",
+    "south_direction_label": "Downtown"
+  },
+  "R13": {
+    "north_direction_label": "Queens",
+    "south_direction_label": "Downtown"
+  },
+  "R14": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "R15": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "R16": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "R17": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "R18": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "R19": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "R20": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "R21": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "R22": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "R23": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "Q01": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "R24": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "R25": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "R26": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "R27": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "R28": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Southbound"
+  },
+  "R29": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Southbound"
+  },
+  "R30": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Southbound"
+  },
+  "R31": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Southbound"
+  },
+  "R32": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Southbound"
+  },
+  "R33": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Southbound"
+  },
+  "R34": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Southbound"
+  },
+  "R35": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Southbound"
+  },
+  "R36": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Southbound"
+  },
+  "R39": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Southbound"
+  },
+  "R40": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Southbound"
+  },
+  "R41": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Southbound"
+  },
+  "R42": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Bay Ridge"
+  },
+  "R43": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Bay Ridge"
+  },
+  "R44": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Bay Ridge"
+  },
+  "R45": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Last Stop"
+  },
+  "D24": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Southbound"
+  },
+  "D25": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Southbound"
+  },
+  "D26": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Southbound"
+  },
+  "D27": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Southbound"
+  },
+  "D28": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Southbound"
+  },
+  "D29": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Southbound"
+  },
+  "D30": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Southbound"
+  },
+  "D31": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Southbound"
+  },
+  "D32": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Southbound"
+  },
+  "D33": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Southbound"
+  },
+  "D34": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Southbound"
+  },
+  "D35": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Southbound"
+  },
+  "D37": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Southbound"
+  },
+  "D38": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Southbound"
+  },
+  "D39": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Southbound"
+  },
+  "D40": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Southbound"
+  },
+  "D41": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Coney Island"
+  },
+  "D42": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Coney Island"
+  },
+  "D43": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Last Stop"
+  },
+  "B12": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Southbound"
+  },
+  "B13": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Southbound"
+  },
+  "B14": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Southbound"
+  },
+  "B15": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Southbound"
+  },
+  "B16": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Southbound"
+  },
+  "B17": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Southbound"
+  },
+  "B18": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Southbound"
+  },
+  "B19": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Southbound"
+  },
+  "B20": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Southbound"
+  },
+  "B21": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Southbound"
+  },
+  "B22": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Coney Island"
+  },
+  "B23": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Coney Island"
+  },
+  "N02": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Coney Island"
+  },
+  "N03": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Coney Island"
+  },
+  "N04": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Coney Island"
+  },
+  "N05": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Coney Island"
+  },
+  "N06": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Coney Island"
+  },
+  "N07": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Coney Island"
+  },
+  "N08": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Coney Island"
+  },
+  "N09": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Coney Island"
+  },
+  "N10": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Coney Island"
+  },
+  "J12": {
+    "north_direction_label": "Jamaica",
+    "south_direction_label": "Manhattan"
+  },
+  "J13": {
+    "north_direction_label": "Jamaica",
+    "south_direction_label": "Manhattan"
+  },
+  "J14": {
+    "north_direction_label": "Jamaica",
+    "south_direction_label": "Manhattan"
+  },
+  "J15": {
+    "north_direction_label": "Jamaica",
+    "south_direction_label": "Manhattan"
+  },
+  "J16": {
+    "north_direction_label": "Jamaica",
+    "south_direction_label": "Manhattan"
+  },
+  "J17": {
+    "north_direction_label": "Jamaica",
+    "south_direction_label": "Manhattan"
+  },
+  "J19": {
+    "north_direction_label": "Queens",
+    "south_direction_label": "Manhattan"
+  },
+  "J20": {
+    "north_direction_label": "Outbound",
+    "south_direction_label": "Manhattan"
+  },
+  "J21": {
+    "north_direction_label": "Outbound",
+    "south_direction_label": "Manhattan"
+  },
+  "J22": {
+    "north_direction_label": "Outbound",
+    "south_direction_label": "Manhattan"
+  },
+  "J23": {
+    "north_direction_label": "Outbound",
+    "south_direction_label": "Manhattan"
+  },
+  "J24": {
+    "north_direction_label": "Outbound",
+    "south_direction_label": "Manhattan"
+  },
+  "J27": {
+    "north_direction_label": "Outbound",
+    "south_direction_label": "Manhattan"
+  },
+  "J28": {
+    "north_direction_label": "Outbound",
+    "south_direction_label": "Manhattan"
+  },
+  "J29": {
+    "north_direction_label": "Outbound",
+    "south_direction_label": "Manhattan"
+  },
+  "J30": {
+    "north_direction_label": "Outbound",
+    "south_direction_label": "Manhattan"
+  },
+  "J31": {
+    "north_direction_label": "Outbound",
+    "south_direction_label": "Manhattan"
+  },
+  "M11": {
+    "north_direction_label": "Outbound",
+    "south_direction_label": "Manhattan"
+  },
+  "M12": {
+    "north_direction_label": "Outbound",
+    "south_direction_label": "Manhattan"
+  },
+  "M13": {
+    "north_direction_label": "Outbound",
+    "south_direction_label": "Manhattan"
+  },
+  "M14": {
+    "north_direction_label": "Outbound",
+    "south_direction_label": "Manhattan"
+  },
+  "M16": {
+    "north_direction_label": "Outbound",
+    "south_direction_label": "Manhattan"
+  },
+  "M18": {
+    "north_direction_label": "Brooklyn",
+    "south_direction_label": "Inbound"
+  },
+  "M19": {
+    "north_direction_label": "Brooklyn",
+    "south_direction_label": "Downtown"
+  },
+  "M20": {
+    "north_direction_label": "Brooklyn",
+    "south_direction_label": "Downtown"
+  },
+  "M21": {
+    "north_direction_label": "Brooklyn",
+    "south_direction_label": "Downtown"
+  },
+  "M22": {
+    "north_direction_label": "Brooklyn",
+    "south_direction_label": "Downtown"
+  },
+  "M23": {
+    "north_direction_label": "Brooklyn",
+    "south_direction_label": "Last Stop"
+  },
+  "M01": {
+    "north_direction_label": "Inbound",
+    "south_direction_label": "Last Stop"
+  },
+  "M04": {
+    "north_direction_label": "Inbound",
+    "south_direction_label": "Middle Village"
+  },
+  "M05": {
+    "north_direction_label": "Inbound",
+    "south_direction_label": "Middle Village"
+  },
+  "M06": {
+    "north_direction_label": "Inbound",
+    "south_direction_label": "Middle Village"
+  },
+  "M08": {
+    "north_direction_label": "Inbound",
+    "south_direction_label": "Middle Village"
+  },
+  "M09": {
+    "north_direction_label": "Inbound",
+    "south_direction_label": "Middle Village"
+  },
+  "M10": {
+    "north_direction_label": "Inbound",
+    "south_direction_label": "Middle Village"
+  },
+  "L01": {
+    "north_direction_label": "Last Stop",
+    "south_direction_label": "Brooklyn"
+  },
+  "L02": {
+    "north_direction_label": "West Side",
+    "south_direction_label": "Brooklyn"
+  },
+  "L03": {
+    "north_direction_label": "West Side",
+    "south_direction_label": "Brooklyn"
+  },
+  "L05": {
+    "north_direction_label": "West Side",
+    "south_direction_label": "Brooklyn"
+  },
+  "L06": {
+    "north_direction_label": "West Side",
+    "south_direction_label": "Brooklyn"
+  },
+  "L08": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Outbound"
+  },
+  "L10": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Outbound"
+  },
+  "L11": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Outbound"
+  },
+  "L12": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Outbound"
+  },
+  "L13": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Outbound"
+  },
+  "L14": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Outbound"
+  },
+  "L15": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Outbound"
+  },
+  "L16": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Outbound"
+  },
+  "L17": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Outbound"
+  },
+  "L19": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Outbound"
+  },
+  "L20": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Outbound"
+  },
+  "L21": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Outbound"
+  },
+  "L22": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Outbound"
+  },
+  "L24": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Canarsie"
+  },
+  "L25": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Canarsie"
+  },
+  "L26": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Canarsie"
+  },
+  "L27": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Canarsie"
+  },
+  "L28": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Canarsie"
+  },
+  "L29": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Last Stop"
+  },
+  "S01": {
+    "north_direction_label": "Last Stop",
+    "south_direction_label": "Prospect Park"
+  },
+  "S03": {
+    "north_direction_label": "Franklin Av",
+    "south_direction_label": "Prospect Park"
+  },
+  "S04": {
+    "north_direction_label": "Franklin Av",
+    "south_direction_label": "Prospect Park"
+  },
+  "A02": {
+    "north_direction_label": "Last Stop",
+    "south_direction_label": "Downtown"
+  },
+  "A03": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "A05": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "A06": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "A07": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "A09": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "A10": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "A11": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "A12": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "D13": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "A14": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "A15": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "A16": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "A17": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "A18": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "A19": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "A20": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "A21": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "A22": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "A24": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "A25": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "A27": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "A28": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "A30": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "A31": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "A32": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "D20": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "A33": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "A34": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "A36": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Brooklyn"
+  },
+  "E01": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Last Stop"
+  },
+  "A38": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Brooklyn"
+  },
+  "A40": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Outbound"
+  },
+  "A41": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Outbound"
+  },
+  "A42": {
+    "north_direction_label": "Westbound",
+    "south_direction_label": "Queens"
+  },
+  "A43": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Outbound"
+  },
+  "A44": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Outbound"
+  },
+  "A45": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Outbound"
+  },
+  "A46": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Outbound"
+  },
+  "A47": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Outbound"
+  },
+  "A48": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Outbound"
+  },
+  "A49": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Outbound"
+  },
+  "A50": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Outbound"
+  },
+  "A51": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Outbound"
+  },
+  "A52": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Outbound"
+  },
+  "A53": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Outbound"
+  },
+  "A54": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Outbound"
+  },
+  "A55": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Queens"
+  },
+  "A57": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Queens"
+  },
+  "A59": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Outbound"
+  },
+  "A60": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Outbound"
+  },
+  "A61": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Outbound"
+  },
+  "A63": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Ozone Park"
+  },
+  "A64": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Ozone Park"
+  },
+  "A65": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Last Stop"
+  },
+  "H01": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Rockaways"
+  },
+  "H02": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Rockaways"
+  },
+  "H03": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Rockaways"
+  },
+  "H04": {
+    "north_direction_label": "Inbound",
+    "south_direction_label": "Rockaways"
+  },
+  "H12": {
+    "north_direction_label": "Inbound",
+    "south_direction_label": "Rockaway Park"
+  },
+  "H13": {
+    "north_direction_label": "Inbound",
+    "south_direction_label": "Rockaway Park"
+  },
+  "H14": {
+    "north_direction_label": "Inbound",
+    "south_direction_label": "Rockaway Park"
+  },
+  "H15": {
+    "north_direction_label": "Inbound",
+    "south_direction_label": "Last Stop"
+  },
+  "H06": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Far Rockaway"
+  },
+  "H07": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Far Rockaway"
+  },
+  "H08": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Far Rockaway"
+  },
+  "H09": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Far Rockaway"
+  },
+  "H10": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Far Rockaway"
+  },
+  "H11": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Last Stop"
+  },
+  "D01": {
+    "north_direction_label": "Last Stop",
+    "south_direction_label": "Manhattan"
+  },
+  "D03": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Manhattan"
+  },
+  "D04": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Manhattan"
+  },
+  "D05": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Manhattan"
+  },
+  "D06": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Manhattan"
+  },
+  "D07": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Manhattan"
+  },
+  "D08": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Manhattan"
+  },
+  "D09": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Manhattan"
+  },
+  "D10": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Manhattan"
+  },
+  "D11": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Manhattan"
+  },
+  "D12": {
+    "north_direction_label": "The Bronx",
+    "south_direction_label": "Downtown"
+  },
+  "B04": {
+    "north_direction_label": "Outbound",
+    "south_direction_label": "Manhattan"
+  },
+  "B06": {
+    "north_direction_label": "Queens",
+    "south_direction_label": "Downtown"
+  },
+  "B08": {
+    "north_direction_label": "Uptown & Queens",
+    "south_direction_label": "Downtown"
+  },
+  "B10": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "D15": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "D16": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "D17": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "D18": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "D19": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "D21": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "D22": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Brooklyn"
+  },
+  "F14": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "F15": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Brooklyn"
+  },
+  "F16": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Brooklyn"
+  },
+  "F18": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Southbound"
+  },
+  "F20": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Southbound"
+  },
+  "F21": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Southbound"
+  },
+  "F22": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Southbound"
+  },
+  "F23": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Southbound"
+  },
+  "F24": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Southbound"
+  },
+  "F25": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Southbound"
+  },
+  "F26": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Southbound"
+  },
+  "F27": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Southbound"
+  },
+  "F29": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Southbound"
+  },
+  "F30": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Southbound"
+  },
+  "F31": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Southbound"
+  },
+  "F32": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Southbound"
+  },
+  "F33": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Southbound"
+  },
+  "F34": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Southbound"
+  },
+  "F35": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Southbound"
+  },
+  "F36": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Coney Island"
+  },
+  "F38": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Coney Island"
+  },
+  "F39": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Coney Island"
+  },
+  "F01": {
+    "north_direction_label": "Last Stop",
+    "south_direction_label": "Manhattan"
+  },
+  "F02": {
+    "north_direction_label": "Jamaica",
+    "south_direction_label": "Manhattan"
+  },
+  "F03": {
+    "north_direction_label": "Jamaica",
+    "south_direction_label": "Manhattan"
+  },
+  "F04": {
+    "north_direction_label": "Jamaica",
+    "south_direction_label": "Manhattan"
+  },
+  "F05": {
+    "north_direction_label": "Jamaica",
+    "south_direction_label": "Manhattan"
+  },
+  "F06": {
+    "north_direction_label": "Jamaica",
+    "south_direction_label": "Manhattan"
+  },
+  "F07": {
+    "north_direction_label": "Jamaica",
+    "south_direction_label": "Manhattan"
+  },
+  "G08": {
+    "north_direction_label": "Outbound",
+    "south_direction_label": "Manhattan"
+  },
+  "G09": {
+    "north_direction_label": "Outbound",
+    "south_direction_label": "Manhattan"
+  },
+  "G10": {
+    "north_direction_label": "Outbound",
+    "south_direction_label": "Manhattan"
+  },
+  "G11": {
+    "north_direction_label": "Outbound",
+    "south_direction_label": "Manhattan"
+  },
+  "G12": {
+    "north_direction_label": "Outbound",
+    "south_direction_label": "Manhattan"
+  },
+  "G13": {
+    "north_direction_label": "Outbound",
+    "south_direction_label": "Manhattan"
+  },
+  "G14": {
+    "north_direction_label": "Outbound",
+    "south_direction_label": "Manhattan"
+  },
+  "G15": {
+    "north_direction_label": "Outbound",
+    "south_direction_label": "Manhattan"
+  },
+  "G16": {
+    "north_direction_label": "Outbound",
+    "south_direction_label": "Manhattan"
+  },
+  "G18": {
+    "north_direction_label": "Outbound",
+    "south_direction_label": "Manhattan"
+  },
+  "G19": {
+    "north_direction_label": "Outbound",
+    "south_direction_label": "Manhattan"
+  },
+  "G20": {
+    "north_direction_label": "Outbound",
+    "south_direction_label": "Manhattan"
+  },
+  "G21": {
+    "north_direction_label": "Outbound",
+    "south_direction_label": "Manhattan"
+  },
+  "F09": {
+    "north_direction_label": "Outbound",
+    "south_direction_label": "Manhattan"
+  },
+  "F11": {
+    "north_direction_label": "Queens",
+    "south_direction_label": "Downtown"
+  },
+  "F12": {
+    "north_direction_label": "Queens",
+    "south_direction_label": "Downtown"
+  },
+  "D14": {
+    "north_direction_label": "Outbound",
+    "south_direction_label": "Downtown"
+  },
+  "G05": {
+    "north_direction_label": "Last Stop",
+    "south_direction_label": "Manhattan"
+  },
+  "G06": {
+    "north_direction_label": "Jamaica",
+    "south_direction_label": "Manhattan"
+  },
+  "G07": {
+    "north_direction_label": "Jamaica",
+    "south_direction_label": "Manhattan"
+  },
+  "G22": {
+    "north_direction_label": "Last Stop",
+    "south_direction_label": "Brooklyn"
+  },
+  "G24": {
+    "north_direction_label": "Court Square",
+    "south_direction_label": "Brooklyn"
+  },
+  "G26": {
+    "north_direction_label": "Queens",
+    "south_direction_label": "Southbound"
+  },
+  "G28": {
+    "north_direction_label": "Queens",
+    "south_direction_label": "Southbound"
+  },
+  "G29": {
+    "north_direction_label": "Queens",
+    "south_direction_label": "Southbound"
+  },
+  "G30": {
+    "north_direction_label": "Queens",
+    "south_direction_label": "Southbound"
+  },
+  "G31": {
+    "north_direction_label": "Queens",
+    "south_direction_label": "Southbound"
+  },
+  "G32": {
+    "north_direction_label": "Queens",
+    "south_direction_label": "Southbound"
+  },
+  "G33": {
+    "north_direction_label": "Queens",
+    "south_direction_label": "Southbound"
+  },
+  "G34": {
+    "north_direction_label": "Queens",
+    "south_direction_label": "Southbound"
+  },
+  "G35": {
+    "north_direction_label": "Queens",
+    "south_direction_label": "Southbound"
+  },
+  "G36": {
+    "north_direction_label": "Queens",
+    "south_direction_label": "Southbound"
+  },
+  "101": {
+    "north_direction_label": "Last Stop",
+    "south_direction_label": "Manhattan"
+  },
+  "103": {
+    "north_direction_label": "Van Cortlandt",
+    "south_direction_label": "Manhattan"
+  },
+  "104": {
+    "north_direction_label": "Van Cortlandt",
+    "south_direction_label": "Manhattan"
+  },
+  "106": {
+    "north_direction_label": "The Bronx",
+    "south_direction_label": "Downtown"
+  },
+  "107": {
+    "north_direction_label": "The Bronx",
+    "south_direction_label": "Downtown"
+  },
+  "108": {
+    "north_direction_label": "The Bronx",
+    "south_direction_label": "Downtown"
+  },
+  "109": {
+    "north_direction_label": "The Bronx",
+    "south_direction_label": "Downtown"
+  },
+  "110": {
+    "north_direction_label": "The Bronx",
+    "south_direction_label": "Downtown"
+  },
+  "111": {
+    "north_direction_label": "The Bronx",
+    "south_direction_label": "Downtown"
+  },
+  "112": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "113": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "114": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "115": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "116": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "117": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "118": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "119": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "120": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "121": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "122": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "123": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "124": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "125": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "126": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "127": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "128": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "129": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "130": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "131": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "132": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "133": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "134": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "135": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "136": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "137": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "138": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "139": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "142": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Last Stop"
+  },
+  "228": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Brooklyn"
+  },
+  "229": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Brooklyn"
+  },
+  "230": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Brooklyn"
+  },
+  "231": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Outbound"
+  },
+  "232": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Outbound"
+  },
+  "233": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Outbound"
+  },
+  "234": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Outbound"
+  },
+  "235": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Outbound"
+  },
+  "236": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Outbound"
+  },
+  "237": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Outbound"
+  },
+  "238": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Outbound"
+  },
+  "239": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Outbound"
+  },
+  "248": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Outbound"
+  },
+  "249": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Outbound"
+  },
+  "250": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Outbound"
+  },
+  "251": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "New Lots"
+  },
+  "252": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "New Lots"
+  },
+  "253": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "New Lots"
+  },
+  "254": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "New Lots"
+  },
+  "255": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "New Lots"
+  },
+  "256": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "New Lots"
+  },
+  "257": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Last Stop"
+  },
+  "241": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Flatbush"
+  },
+  "242": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Flatbush"
+  },
+  "243": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Flatbush"
+  },
+  "244": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Flatbush"
+  },
+  "245": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Flatbush"
+  },
+  "246": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Flatbush"
+  },
+  "247": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Last Stop"
+  },
+  "601": {
+    "north_direction_label": "Last Stop",
+    "south_direction_label": "Manhattan"
+  },
+  "602": {
+    "north_direction_label": "Pelham Bay",
+    "south_direction_label": "Manhattan"
+  },
+  "603": {
+    "north_direction_label": "Pelham Bay",
+    "south_direction_label": "Manhattan"
+  },
+  "604": {
+    "north_direction_label": "Pelham Bay",
+    "south_direction_label": "Manhattan"
+  },
+  "606": {
+    "north_direction_label": "Pelham Bay",
+    "south_direction_label": "Manhattan"
+  },
+  "607": {
+    "north_direction_label": "Pelham Bay",
+    "south_direction_label": "Manhattan"
+  },
+  "608": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Manhattan"
+  },
+  "609": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Manhattan"
+  },
+  "610": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Manhattan"
+  },
+  "611": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Manhattan"
+  },
+  "612": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Manhattan"
+  },
+  "613": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Manhattan"
+  },
+  "614": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Manhattan"
+  },
+  "615": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Manhattan"
+  },
+  "616": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Manhattan"
+  },
+  "617": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Manhattan"
+  },
+  "618": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Manhattan"
+  },
+  "619": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Manhattan"
+  },
+  "401": {
+    "north_direction_label": "Last Stop",
+    "south_direction_label": "Manhattan"
+  },
+  "402": {
+    "north_direction_label": "Woodlawn",
+    "south_direction_label": "Manhattan"
+  },
+  "405": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Manhattan"
+  },
+  "406": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Manhattan"
+  },
+  "407": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Manhattan"
+  },
+  "408": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Manhattan"
+  },
+  "409": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Manhattan"
+  },
+  "410": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Manhattan"
+  },
+  "411": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Manhattan"
+  },
+  "412": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Manhattan"
+  },
+  "413": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Manhattan"
+  },
+  "414": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Manhattan"
+  },
+  "415": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Manhattan"
+  },
+  "416": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Manhattan"
+  },
+  "621": {
+    "north_direction_label": "The Bronx",
+    "south_direction_label": "Downtown"
+  },
+  "622": {
+    "north_direction_label": "The Bronx",
+    "south_direction_label": "Downtown"
+  },
+  "623": {
+    "north_direction_label": "The Bronx",
+    "south_direction_label": "Downtown"
+  },
+  "624": {
+    "north_direction_label": "The Bronx",
+    "south_direction_label": "Downtown"
+  },
+  "625": {
+    "north_direction_label": "The Bronx",
+    "south_direction_label": "Downtown"
+  },
+  "626": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "627": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "628": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "629": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "630": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "631": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "632": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "633": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "634": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "635": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "636": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "637": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "638": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "639": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "640": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "418": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "419": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "420": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "423": {
+    "north_direction_label": "Manhattan",
+    "south_direction_label": "Outbound"
+  },
+  "201": {
+    "north_direction_label": "Last Stop",
+    "south_direction_label": "Manhattan"
+  },
+  "204": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Manhattan"
+  },
+  "205": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Manhattan"
+  },
+  "206": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Manhattan"
+  },
+  "207": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Manhattan"
+  },
+  "208": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Manhattan"
+  },
+  "209": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Manhattan"
+  },
+  "210": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Manhattan"
+  },
+  "211": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Manhattan"
+  },
+  "212": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Manhattan"
+  },
+  "213": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Manhattan"
+  },
+  "214": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Manhattan"
+  },
+  "215": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Manhattan"
+  },
+  "216": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Manhattan"
+  },
+  "217": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Manhattan"
+  },
+  "218": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Manhattan"
+  },
+  "219": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Manhattan"
+  },
+  "220": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Manhattan"
+  },
+  "221": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Manhattan"
+  },
+  "222": {
+    "north_direction_label": "Northbound",
+    "south_direction_label": "Manhattan"
+  },
+  "301": {
+    "north_direction_label": "Last Stop",
+    "south_direction_label": "Downtown"
+  },
+  "302": {
+    "north_direction_label": "Harlem",
+    "south_direction_label": "Downtown"
+  },
+  "224": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "225": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "226": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "227": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "501": {
+    "north_direction_label": "Last Stop",
+    "south_direction_label": "Manhattan"
+  },
+  "502": {
+    "north_direction_label": "Eastchester",
+    "south_direction_label": "Manhattan"
+  },
+  "503": {
+    "north_direction_label": "Eastchester",
+    "south_direction_label": "Manhattan"
+  },
+  "504": {
+    "north_direction_label": "Eastchester",
+    "south_direction_label": "Manhattan"
+  },
+  "505": {
+    "north_direction_label": "Eastchester",
+    "south_direction_label": "Manhattan"
+  },
+  "701": {
+    "north_direction_label": "Last Stop",
+    "south_direction_label": "Manhattan"
+  },
+  "702": {
+    "north_direction_label": "Outbound",
+    "south_direction_label": "Manhattan"
+  },
+  "705": {
+    "north_direction_label": "Outbound",
+    "south_direction_label": "Manhattan"
+  },
+  "706": {
+    "north_direction_label": "Outbound",
+    "south_direction_label": "Manhattan"
+  },
+  "707": {
+    "north_direction_label": "Outbound",
+    "south_direction_label": "Manhattan"
+  },
+  "708": {
+    "north_direction_label": "Outbound",
+    "south_direction_label": "Manhattan"
+  },
+  "709": {
+    "north_direction_label": "Outbound",
+    "south_direction_label": "Manhattan"
+  },
+  "710": {
+    "north_direction_label": "Outbound",
+    "south_direction_label": "Manhattan"
+  },
+  "711": {
+    "north_direction_label": "Outbound",
+    "south_direction_label": "Manhattan"
+  },
+  "712": {
+    "north_direction_label": "Outbound",
+    "south_direction_label": "Manhattan"
+  },
+  "713": {
+    "north_direction_label": "Outbound",
+    "south_direction_label": "Manhattan"
+  },
+  "714": {
+    "north_direction_label": "Outbound",
+    "south_direction_label": "Manhattan"
+  },
+  "715": {
+    "north_direction_label": "Outbound",
+    "south_direction_label": "Manhattan"
+  },
+  "716": {
+    "north_direction_label": "Outbound",
+    "south_direction_label": "Manhattan"
+  },
+  "R09": {
+    "north_direction_label": "Astoria",
+    "south_direction_label": "Manhattan"
+  },
+  "718": {
+    "north_direction_label": "Outbound",
+    "south_direction_label": "Manhattan"
+  },
+  "719": {
+    "north_direction_label": "Outbound",
+    "south_direction_label": "Manhattan"
+  },
+  "720": {
+    "north_direction_label": "Outbound",
+    "south_direction_label": "Manhattan"
+  },
+  "721": {
+    "north_direction_label": "Outbound",
+    "south_direction_label": "Manhattan"
+  },
+  "723": {
+    "north_direction_label": "Queens",
+    "south_direction_label": "Hudson Yards"
+  },
+  "724": {
+    "north_direction_label": "Queens",
+    "south_direction_label": "Hudson Yards"
+  },
+  "725": {
+    "north_direction_label": "Queens",
+    "south_direction_label": "Hudson Yards"
+  },
+  "902": {
+    "north_direction_label": "Last Stop",
+    "south_direction_label": "Grand Central"
+  },
+  "901": {
+    "north_direction_label": "Times Square",
+    "south_direction_label": "Last Stop"
+  },
+  "726": {
+    "north_direction_label": "Last Stop",
+    "south_direction_label": "Queens"
+  },
+  "Q05": {
+    "north_direction_label": "Last Stop",
+    "south_direction_label": "Downtown"
+  },
+  "Q04": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "Q03": {
+    "north_direction_label": "Uptown",
+    "south_direction_label": "Downtown"
+  },
+  "S31": {
+    "north_direction_label": "Last Stop",
+    "south_direction_label": "South Shore"
+  },
+  "S30": {
+    "north_direction_label": "Ferry",
+    "south_direction_label": "South Shore"
+  },
+  "S29": {
+    "north_direction_label": "Ferry",
+    "south_direction_label": "South Shore"
+  },
+  "S28": {
+    "north_direction_label": "Ferry",
+    "south_direction_label": "South Shore"
+  },
+  "S27": {
+    "north_direction_label": "Ferry",
+    "south_direction_label": "South Shore"
+  },
+  "S26": {
+    "north_direction_label": "Ferry",
+    "south_direction_label": "South Shore"
+  },
+  "S25": {
+    "north_direction_label": "Ferry",
+    "south_direction_label": "South Shore"
+  },
+  "S24": {
+    "north_direction_label": "Ferry",
+    "south_direction_label": "South Shore"
+  },
+  "S23": {
+    "north_direction_label": "Ferry",
+    "south_direction_label": "South Shore"
+  },
+  "S22": {
+    "north_direction_label": "Ferry",
+    "south_direction_label": "South Shore"
+  },
+  "S21": {
+    "north_direction_label": "Ferry",
+    "south_direction_label": "South Shore"
+  },
+  "S20": {
+    "north_direction_label": "Ferry",
+    "south_direction_label": "South Shore"
+  },
+  "S19": {
+    "north_direction_label": "Ferry",
+    "south_direction_label": "South Shore"
+  },
+  "S18": {
+    "north_direction_label": "Ferry",
+    "south_direction_label": "South Shore"
+  },
+  "S17": {
+    "north_direction_label": "Ferry",
+    "south_direction_label": "South Shore"
+  },
+  "S16": {
+    "north_direction_label": "Ferry",
+    "south_direction_label": "South Shore"
+  },
+  "S15": {
+    "north_direction_label": "Ferry",
+    "south_direction_label": "South Shore"
+  },
+  "S14": {
+    "north_direction_label": "Ferry",
+    "south_direction_label": "South Shore"
+  },
+  "S13": {
+    "north_direction_label": "Ferry",
+    "south_direction_label": "Tottenville"
+  },
+  "S09": {
+    "north_direction_label": "Ferry",
+    "south_direction_label": "Last Stop"
+  },
+  "S11": {
+    "north_direction_label": "Ferry",
+    "south_direction_label": "Tottenville"
+  }
+}
