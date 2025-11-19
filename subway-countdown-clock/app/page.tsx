@@ -1,15 +1,37 @@
 "use client";
 import { useEffect, useState } from "react";
+import subwayColors from "../pages/api/subway-colors.json";
+
+const MAX_NUM = 3;
+const TWO_COL = false;
+
+// Train bullet component
+function TrainBullet({ line }: { line: string }) {
+  const lineData = subwayColors.lines[line as keyof typeof subwayColors.lines];
+  const color = lineData?.hex_color || "#808183";
+  // Yellow lines need dark text for contrast
+  const textColor = ["N", "Q", "R", "W"].includes(line) ? "#000000" : "#FFFFFF";
+
+  return (
+    <div
+      className="inline-flex items-center justify-center w-8 h-8 rounded-full font-bold text-sm"
+      style={{ backgroundColor: color, color: textColor }}
+    >
+      {line}
+    </div>
+  );
+}
 
 export default function Home() {
   const [mtaData, setMtaData] = useState<{
     stations: Record<string, { name: string; direction: string; trains: { trainId: string; rawEta: number; destination: string }[] }>;
   } | null>(null);
+  const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
     async function fetchMTA() {
       try {
-        const response = await fetch("/api/mta?stations=A40N,A40S");
+        const response = await fetch("/api/mta?stations=A40N,A40S,231N,231S");
         const data = await response.json();
         setMtaData(data);
       } catch (error) {
@@ -27,52 +49,158 @@ export default function Home() {
     return () => clearInterval(interval);
   }, []);
 
+  // Update clock every second
+  useEffect(() => {
+    const clockInterval = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+
+    return () => clearInterval(clockInterval);
+  }, []);
+
+  const timeString = currentTime.toLocaleTimeString('en-US', {
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true
+  });
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <h1 className="text-2xl font-bold">Subway Countdown Clock</h1>
-        <div className="mt-4">
+    <div className="min-h-screen font-sans">
+      {TWO_COL && <h1 className="text-2xl font-bold px-16 pt-4 text-center">{timeString}</h1>}
+      <div className={TWO_COL ? "flex flex-1 items-center justify-center" : "flex min-h-screen items-center justify-center"}>
+        <main className="flex w-full max-w-3xl flex-col px-16">
+          {!TWO_COL && <h1 className="text-2xl font-bold">{timeString}</h1>}
+          <div className={TWO_COL ? "" : "mt-4"}>
           {mtaData ? (
-            <div>
-              {Object.entries(mtaData.stations)
-                .sort(([a], [b]) => {
-                  // Sort so northbound (N) appears before southbound (S)
-                  const aDir = a.slice(-1);
-                  const bDir = b.slice(-1);
-                  if (aDir === 'N' && bDir === 'S') return -1;
-                  if (aDir === 'S' && bDir === 'N') return 1;
-                  return 0;
-                })
-                .map(([stationId, stationData]) => (
-                <div key={stationId} className="mb-8">
-                  <h2 className="text-xl font-semibold mb-4">{stationData.name} ({stationData.direction})</h2>
-                  <ul className="space-y-2">
-                    {stationData.trains.slice(0, 5).map((train, index) => (
-                      <li
-                        key={index}
-                        className="p-2 border rounded bg-gray-100 dark:bg-gray-800"
-                      >
-                        <p className="text-lg">
-                          <span className="font-bold">Train:</span> {train.trainId}
-                        </p>
-                        <p className="text-lg">
-                          <span className="font-bold">Destination:</span> {train.destination}
-                        </p>
-                        <p className="text-lg">
-                          <span className="font-bold">ETA:</span>{" "}
-                          {train.rawEta < 60 ? "NOW" : `${Math.floor(train.rawEta / 60)} minutes`}
-                        </p>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
+            TWO_COL ? (
+              <div className="grid grid-cols-2 gap-8">
+                {/* Group stations by base ID (without N/S suffix) */}
+                {(() => {
+                  // Get unique base station IDs
+                  const baseStationIds = [...new Set(
+                    Object.keys(mtaData.stations).map(id => id.slice(0, -1))
+                  )];
+
+                  return baseStationIds.map(baseId => {
+                    const northStation = mtaData.stations[`${baseId}N`];
+                    const southStation = mtaData.stations[`${baseId}S`];
+                    const stationName = northStation?.name || southStation?.name || baseId;
+
+                    return (
+                      <div key={baseId}>
+                        <h2 className="text-lg font-semibold mb-2">{stationName}</h2>
+
+                        {/* Northbound direction */}
+                        {northStation && (
+                          <div className="mb-4">
+                            <h3 className="text-sm font-medium mb-2">{northStation.direction}</h3>
+                            <ul className="space-y-2">
+                              {northStation.trains.slice(0, MAX_NUM).map((train, index) => (
+                                <li
+                                  key={index}
+                                  className="p-2 rounded bg-gray-600 flex items-center gap-2"
+                                >
+                                  <TrainBullet line={train.trainId} />
+                                  <div className="flex-1 min-w-0">
+                                    <p className="text-sm truncate">
+                                      {train.destination}
+                                    </p>
+                                  </div>
+                                  <div className="text-center">
+                                    <p className="text-xl font-bold">
+                                      {train.rawEta < 60 ? "0" : Math.floor(train.rawEta / 60)}
+                                    </p>
+                                    <p className="text-xs">
+                                      min
+                                    </p>
+                                  </div>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+
+                        {/* Southbound direction */}
+                        {southStation && (
+                          <div>
+                            <h3 className="text-sm font-medium mb-2">{southStation.direction}</h3>
+                            <ul className="space-y-2">
+                              {southStation.trains.slice(0, MAX_NUM).map((train, index) => (
+                                <li
+                                  key={index}
+                                  className="p-2 rounded bg-gray-600 flex items-center gap-2"
+                                >
+                                  <TrainBullet line={train.trainId} />
+                                  <div className="flex-1 min-w-0">
+                                    <p className="text-sm truncate">
+                                      {train.destination}
+                                    </p>
+                                  </div>
+                                  <div className="text-center">
+                                    <p className="text-xl font-bold">
+                                      {train.rawEta < 60 ? "0" : Math.floor(train.rawEta / 60)}
+                                    </p>
+                                    <p className="text-xs">
+                                      min
+                                    </p>
+                                  </div>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  });
+                })()}
+              </div>
+            ) : (
+              <div>
+                {Object.entries(mtaData.stations)
+                  .sort(([a], [b]) => {
+                    // Sort so northbound (N) appears before southbound (S)
+                    const aDir = a.slice(-1);
+                    const bDir = b.slice(-1);
+                    if (aDir === 'N' && bDir === 'S') return -1;
+                    if (aDir === 'S' && bDir === 'N') return 1;
+                    return 0;
+                  })
+                  .map(([stationId, stationData]) => (
+                  <div key={stationId} className="mb-8">
+                    <h2 className="text-xl font-semibold mb-4">{stationData.name} ({stationData.direction})</h2>
+                    <ul className="space-y-2">
+                      {stationData.trains.slice(0, MAX_NUM).map((train, index) => (
+                        <li
+                          key={index}
+                          className="p-2 rounded bg-gray-600 flex items-center gap-3"
+                        >
+                          <TrainBullet line={train.trainId} />
+                          <div className="flex-1">
+                            <p className="text-lg">
+                              {train.destination}
+                            </p>
+                          </div>
+                          <div className="text-center">
+                            <p className="text-2xl font-bold">
+                              {train.rawEta < 60 ? "0" : Math.floor(train.rawEta / 60)}
+                            </p>
+                            <p className="text-xs">
+                              min
+                            </p>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            )
           ) : (
             <p>Loading data...</p>
           )}
-        </div>
-      </main>
+          </div>
+        </main>
+      </div>
     </div>
   );
 }

@@ -1,0 +1,124 @@
+{
+  "lines": {
+    "A": {
+      "hex_color": "#0062CF",
+      "cmyk": "(100, 30, 0, 0)",
+      "group": "A,C,E"
+    },
+    "C": {
+      "hex_color": "#0062CF",
+      "cmyk": "(100, 30, 0, 0)",
+      "group": "A,C,E"
+    },
+    "E": {
+      "hex_color": "#0062CF",
+      "cmyk": "(100, 30, 0, 0)",
+      "group": "A,C,E"
+    },
+    "B": {
+      "hex_color": "#EB6800",
+      "cmyk": "(0, 57, 100, 0)",
+      "group": "B,D,F,M"
+    },
+    "D": {
+      "hex_color": "#EB6800",
+      "cmyk": "(0, 57, 100, 0)",
+      "group": "B,D,F,M"
+    },
+    "F": {
+      "hex_color": "#EB6800",
+      "cmyk": "(0, 57, 100, 0)",
+      "group": "B,D,F,M"
+    },
+    "M": {
+      "hex_color": "#EB6800",
+      "cmyk": "(0, 57, 100, 0)",
+      "group": "B,D,F,M"
+    },
+    "G": {
+      "hex_color": "#799534",
+      "cmyk": "(60, 7, 100, 0)",
+      "group": "G"
+    },
+    "J": {
+      "hex_color": "#8E5C33",
+      "cmyk": "(40, 58, 100, 0)",
+      "group": "J,Z"
+    },
+    "Z": {
+      "hex_color": "#8E5C33",
+      "cmyk": "(40, 58, 100, 0)",
+      "group": "J,Z"
+    },
+    "L": {
+      "hex_color": "#7C858C",
+      "cmyk": "(0, 0, 0, 50)",
+      "group": "L"
+    },
+    "N": {
+      "hex_color": "#F6BC26",
+      "cmyk": "(0, 15, 100, 0)",
+      "group": "N,Q,R,W"
+    },
+    "Q": {
+      "hex_color": "#F6BC26",
+      "cmyk": "(0, 15, 100, 0)",
+      "group": "N,Q,R,W"
+    },
+    "R": {
+      "hex_color": "#F6BC26",
+      "cmyk": "(0, 15, 100, 0)",
+      "group": "N,Q,R,W"
+    },
+    "W": {
+      "hex_color": "#F6BC26",
+      "cmyk": "(0, 15, 100, 0)",
+      "group": "N,Q,R,W"
+    },
+    "S": {
+      "hex_color": "#7C858C",
+      "cmyk": "(0, 0, 0, 50)",
+      "group": "S"
+    },
+    "T": {
+      "hex_color": "#008EB7",
+      "cmyk": "(100, 0, 20, 0)",
+      "group": "T"
+    },
+    "1": {
+      "hex_color": "#D82233",
+      "cmyk": "(0, 100, 65, 0)",
+      "group": "1,2,3"
+    },
+    "2": {
+      "hex_color": "#D82233",
+      "cmyk": "(0, 100, 65, 0)",
+      "group": "1,2,3"
+    },
+    "3": {
+      "hex_color": "#D82233",
+      "cmyk": "(0, 100, 65, 0)",
+      "group": "1,2,3"
+    },
+    "4": {
+      "hex_color": "#009952",
+      "cmyk": "(100, 0, 80, 0)",
+      "group": "4,5,6"
+    },
+    "5": {
+      "hex_color": "#009952",
+      "cmyk": "(100, 0, 80, 0)",
+      "group": "4,5,6"
+    },
+    "6": {
+      "hex_color": "#009952",
+      "cmyk": "(100, 0, 80, 0)",
+      "group": "4,5,6"
+    },
+    "7": {
+      "hex_color": "#9A38A1",
+      "cmyk": "(33, 90, 0, 0)",
+      "group": "7"
+    }
+  }
+}
