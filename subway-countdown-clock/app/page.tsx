@@ -1,9 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import subwayColors from "../pages/api/subway-colors.json";
 
 const MAX_NUM = 3;
-const TWO_COL = false;
+const TWO_COL = true;
 
 // Train bullet component
 function TrainBullet({ line }: { line: string }) {
@@ -66,10 +67,18 @@ export default function Home() {
 
   return (
     <div className="min-h-screen font-sans">
-      {TWO_COL && <h1 className="text-2xl font-bold px-16 pt-4 text-center">{timeString}</h1>}
+      <div className="flex items-center justify-between px-4 pt-4">
+        <div className="w-14" />
+        <h1 className="text-2xl font-bold flex-1 text-center">{timeString}</h1>
+        <Link
+          href="/bus"
+          className="text-sm text-gray-400 hover:text-foreground transition-colors"
+        >
+          Bus →
+        </Link>
+      </div>
       <div className={TWO_COL ? "flex flex-1 items-center justify-center" : "flex min-h-screen items-center justify-center"}>
         <main className="flex w-full max-w-3xl flex-col px-16">
-          {!TWO_COL && <h1 className="text-2xl font-bold">{timeString}</h1>}
           <div className={TWO_COL ? "" : "mt-4"}>
           {mtaData ? (
             TWO_COL ? (
