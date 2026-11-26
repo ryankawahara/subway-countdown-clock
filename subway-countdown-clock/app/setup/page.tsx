@@ -29,6 +29,7 @@ export default function SetupPage() {
   const [selectedLine, setSelectedLine] = useState<string | null>(null);
   const [selectedStations, setSelectedStations] = useState<string[]>([]);
   const [showSaved, setShowSaved] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   // Load saved stations from localStorage
   useEffect(() => {
@@ -169,16 +170,46 @@ export default function SetupPage() {
   }
 
   // Station selection screen
-  const stations = getStationsForLine(LINE_GROUPS[selectedLine as keyof typeof LINE_GROUPS]);
+  const allStations = getStationsForLine(LINE_GROUPS[selectedLine as keyof typeof LINE_GROUPS]);
+
+  // Filter stations based on search query
+  const filteredStations = searchQuery.trim()
+    ? allStations.filter(station =>
+        station.stop_name.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : allStations;
 
   return (
     <div className="min-h-screen p-6 bg-gray-900 text-white">
       <div className="max-w-2xl mx-auto">
         <h1 className="text-2xl font-bold mb-2 text-center">{selectedLine} Line Stations</h1>
-        <p className="text-center text-gray-400 mb-6">Tap direction to add/remove</p>
+        <p className="text-center text-gray-400 mb-4">Tap direction to add/remove</p>
+
+        {/* Search input with virtual keyboard */}
+        <div className="mb-6">
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search stations..."
+            className="w-full p-4 text-xl bg-gray-800 border-2 border-gray-600 rounded-lg focus:border-blue-500 focus:outline-none"
+          />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery("")}
+              className="mt-2 px-6 py-3 bg-gray-700 hover:bg-gray-600 rounded-lg text-lg"
+            >
+              Clear Search
+            </button>
+          )}
+        </div>
+
+        {filteredStations.length === 0 && (
+          <p className="text-center text-gray-400 my-8">No stations found</p>
+        )}
 
         <div className="space-y-4 mb-8">
-          {stations.map((station) => {
+          {filteredStations.map((station) => {
             const baseId = station.stop_id;
             const northSelected = isStationSelected(baseId, "N");
             const southSelected = isStationSelected(baseId, "S");
