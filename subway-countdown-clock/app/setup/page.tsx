@@ -123,17 +123,25 @@ export default function SetupPage() {
             <h2 className="text-lg font-semibold mb-2">Selected Stations ({selectedStations.length})</h2>
             {selectedStations.length > 0 ? (
               <div className="text-sm space-y-1">
-                {selectedStations.map(id => (
-                  <div key={id} className="flex justify-between items-center">
-                    <span>{id}</span>
-                    <button
-                      onClick={() => setSelectedStations(prev => prev.filter(s => s !== id))}
-                      className="text-red-400 hover:text-red-300 px-3 py-1"
-                    >
-                      Remove
-                    </button>
-                  </div>
-                ))}
+                {selectedStations.map(id => {
+                  const baseId = id.slice(0, -1);
+                  const direction = id.slice(-1);
+                  const station = stationData[baseId as keyof typeof stationData] as Station | undefined;
+                  const stationName = station?.stop_name || baseId;
+                  const directionLabel = direction === 'N' ? 'Northbound' : 'Southbound';
+
+                  return (
+                    <div key={id} className="flex justify-between items-center">
+                      <span>{stationName} - {directionLabel}</span>
+                      <button
+                        onClick={() => setSelectedStations(prev => prev.filter(s => s !== id))}
+                        className="text-red-400 hover:text-red-300 px-3 py-1"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  );
+                })}
               </div>
             ) : (
               <p className="text-gray-400 text-sm">No stations selected yet</p>
