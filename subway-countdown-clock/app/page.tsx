@@ -27,11 +27,20 @@ export default function Home() {
     stations: Record<string, { name: string; direction: string; trains: { trainId: string; rawEta: number; destination: string }[] }>;
   } | null>(null);
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [stations, setStations] = useState("A40N,A40S,231N,231S");
+
+  // Load stations from localStorage
+  useEffect(() => {
+    const savedStations = localStorage.getItem("selectedStations");
+    if (savedStations) {
+      setStations(savedStations);
+    }
+  }, []);
 
   useEffect(() => {
     async function fetchMTA() {
       try {
-        const response = await fetch("/api/mta?stations=A40N,A40S,231N,231S");
+        const response = await fetch(`/api/mta?stations=${stations}`);
         const data = await response.json();
         setMtaData(data);
       } catch (error) {
@@ -47,7 +56,7 @@ export default function Home() {
 
     // Clean up the interval when the component unmounts
     return () => clearInterval(interval);
-  }, []);
+  }, [stations]);
 
   // Update clock every second
   useEffect(() => {
@@ -65,7 +74,15 @@ export default function Home() {
   });
 
   return (
-    <div className="min-h-screen font-sans">
+    <div className="min-h-screen font-sans relative">
+      {/* Settings button - large touch target */}
+      <a
+        href="/setup"
+        className="fixed top-4 right-4 bg-gray-700 hover:bg-gray-600 active:bg-gray-500 text-white p-4 rounded-lg text-xl font-bold z-10 min-w-[80px] min-h-[80px] flex items-center justify-center"
+      >
+        ⚙️
+      </a>
+
       {TWO_COL && <h1 className="text-2xl font-bold px-16 pt-4 text-center">{timeString}</h1>}
       <div className={TWO_COL ? "flex flex-1 items-center justify-center" : "flex min-h-screen items-center justify-center"}>
         <main className="flex w-full max-w-3xl flex-col px-16">
