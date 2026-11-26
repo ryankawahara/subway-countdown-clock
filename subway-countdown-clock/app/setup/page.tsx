@@ -30,12 +30,17 @@ export default function SetupPage() {
   const [selectedStations, setSelectedStations] = useState<string[]>([]);
   const [showSaved, setShowSaved] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [compactMode, setCompactMode] = useState(false);
 
-  // Load saved stations from localStorage
+  // Load saved stations and display mode from localStorage
   useEffect(() => {
     const saved = localStorage.getItem("selectedStations");
     if (saved) {
       setSelectedStations(saved.split(","));
+    }
+    const savedCompactMode = localStorage.getItem("compactMode");
+    if (savedCompactMode === "true") {
+      setCompactMode(true);
     }
   }, []);
 
@@ -76,6 +81,7 @@ export default function SetupPage() {
     }
 
     localStorage.setItem("selectedStations", selectedStations.join(","));
+    localStorage.setItem("compactMode", compactMode.toString());
     setShowSaved(true);
     setTimeout(() => {
       router.push("/");
@@ -121,6 +127,34 @@ export default function SetupPage() {
           </div>
 
           <div className="mt-8 p-4 bg-gray-800 rounded-lg">
+            <h2 className="text-lg font-semibold mb-4">Display Mode</h2>
+            <div className="grid grid-cols-2 gap-3 mb-6">
+              <button
+                onClick={() => setCompactMode(false)}
+                className={`p-6 rounded-lg text-lg font-semibold transition-colors ${
+                  !compactMode
+                    ? "bg-blue-600 hover:bg-blue-700"
+                    : "bg-gray-700 hover:bg-gray-600"
+                }`}
+              >
+                {!compactMode ? "✓ " : ""}Normal
+                <div className="text-xs font-normal mt-1">Larger text</div>
+              </button>
+              <button
+                onClick={() => setCompactMode(true)}
+                className={`p-6 rounded-lg text-lg font-semibold transition-colors ${
+                  compactMode
+                    ? "bg-blue-600 hover:bg-blue-700"
+                    : "bg-gray-700 hover:bg-gray-600"
+                }`}
+              >
+                {compactMode ? "✓ " : ""}Compact
+                <div className="text-xs font-normal mt-1">800x480</div>
+              </button>
+            </div>
+          </div>
+
+          <div className="mt-4 p-4 bg-gray-800 rounded-lg">
             <h2 className="text-lg font-semibold mb-2">Selected Stations ({selectedStations.length})</h2>
             {selectedStations.length > 0 ? (
               <div className="text-sm space-y-1">
