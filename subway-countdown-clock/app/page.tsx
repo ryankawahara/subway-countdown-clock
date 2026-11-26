@@ -27,8 +27,9 @@ type ServiceAlert = {
   descriptionText: string;
   affectedLines: string[];
   activePeriod: { start: number | null; end: number | null } | null;
-  cause: string;
-  effect: string;
+  isPlanned?: boolean;
+  cause: number;
+  effect: number;
 };
 
 export default function Home() {
@@ -40,6 +41,7 @@ export default function Home() {
   const [stations, setStations] = useState("A40N,A40S,231N,231S");
   const [showSettings, setShowSettings] = useState(true);
   const [displayMode, setDisplayMode] = useState<"normal" | "compact" | "portrait">("normal");
+  const [showTimeFormat, setShowTimeFormat] = useState<Set<string>>(new Set());
 
   // Load stations and display mode from localStorage
   useEffect(() => {
@@ -119,11 +121,70 @@ export default function Home() {
     return () => clearInterval(clockInterval);
   }, []);
 
+  // Prevent screen from sleeping
+  useEffect(() => {
+    let wakeLock: any = null;
+
+    async function requestWakeLock() {
+      try {
+        if ('wakeLock' in navigator) {
+          wakeLock = await (navigator as any).wakeLock.request('screen');
+          console.log('Wake Lock acquired');
+        }
+      } catch (err) {
+        console.error('Wake Lock error:', err);
+      }
+    }
+
+    requestWakeLock();
+
+    // Re-acquire wake lock when page becomes visible again
+    const handleVisibilityChange = () => {
+      if (wakeLock !== null && document.visibilityState === 'visible') {
+        requestWakeLock();
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      if (wakeLock !== null) {
+        wakeLock.release().then(() => {
+          console.log('Wake Lock released');
+        });
+      }
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, []);
+
   const timeString = currentTime.toLocaleTimeString('en-US', {
     hour: 'numeric',
     minute: '2-digit',
     hour12: true
   });
+
+  // Toggle time format for a specific station
+  const toggleTimeFormat = (stationId: string) => {
+    setShowTimeFormat(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(stationId)) {
+        newSet.delete(stationId);
+      } else {
+        newSet.add(stationId);
+      }
+      return newSet;
+    });
+  };
+
+  // Format arrival time from rawEta (seconds)
+  const formatArrivalTime = (rawEta: number) => {
+    const arrivalDate = new Date(Date.now() + rawEta * 1000);
+    return arrivalDate.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true
+    });
+  };
 
   return (
     <div
@@ -152,54 +213,130 @@ export default function Home() {
           </div>
 
           {/* Service Alerts Ticker */}
-          {serviceAlerts.length > 0 && (
-            <div className="bg-yellow-600 text-black px-2 py-1 rounded text-xs overflow-hidden relative">
-              <div className="flex items-center gap-2">
-                <span className="font-bold flex-shrink-0">⚠</span>
-                <div className="flex-1 overflow-hidden relative">
-                  {serviceAlerts.length === 1 ? (
-                    <div className="whitespace-nowrap overflow-hidden text-ellipsis">
-                      <span className="font-semibold">
-                        {serviceAlerts[0].affectedLines.length > 0 && `[${serviceAlerts[0].affectedLines.join(',')}] `}
-                      </span>
-                      <span>{serviceAlerts[0].headerText}</span>
-                      {serviceAlerts[0].activePeriod?.start && (
-                        <span className="ml-2 opacity-80">
-                          {new Date(serviceAlerts[0].activePeriod.start * 1000).toLocaleString('en-US', {
-                            month: 'short',
-                            day: 'numeric',
-                            hour: 'numeric',
-                            minute: '2-digit'
-                          })}
-                        </span>
-                      )}
-                    </div>
-                  ) : (
-                    <div className="animate-scroll whitespace-nowrap">
-                      {serviceAlerts.map((alert, idx) => (
-                        <span key={alert.id} className="inline-block mr-8">
-                          <span className="font-semibold">
-                            {alert.affectedLines.length > 0 && `[${alert.affectedLines.join(',')}] `}
-                          </span>
-                          <span>{alert.headerText}</span>
-                          {alert.activePeriod?.start && (
-                            <span className="ml-2 opacity-80">
-                              {new Date(alert.activePeriod.start * 1000).toLocaleString('en-US', {
-                                month: 'short',
-                                day: 'numeric',
-                                hour: 'numeric',
-                                minute: '2-digit'
-                              })}
+          {(() => {
+            const now = Math.floor(Date.now() / 1000); // Current time in Unix timestamp
+
+            // Filter alerts that are currently active (within their time range)
+            const currentAlerts = serviceAlerts.filter(alert => {
+              if (!alert.activePeriod) return true; // Show if no time range specified
+              const { start, end } = alert.activePeriod;
+
+              // Alert is active if:
+              // - No end time and start time has passed, OR
+              // - Current time is between start and end
+              if (end === null) {
+                return !start || now >= start;
+              }
+              return (!start || now >= start) && now <= end;
+            });
+
+            const activeAlerts = currentAlerts.filter(a => !a.isPlanned);
+            const plannedAlerts = currentAlerts.filter(a => a.isPlanned);
+
+            return (
+              <div className="space-y-1">
+                {/* Active Alerts - Red/Orange */}
+                {activeAlerts.length > 0 && (
+                  <div className="bg-red-600 text-white px-2 py-1 rounded text-xs overflow-hidden relative">
+                    <div className="flex items-center gap-2">
+                      <span className="font-bold flex-shrink-0">⚠</span>
+                      <div className="flex-1 overflow-hidden relative">
+                        {activeAlerts.length === 1 ? (
+                          <div className="whitespace-nowrap overflow-hidden text-ellipsis">
+                            <span className="font-semibold">
+                              {activeAlerts[0].affectedLines.length > 0 && `[${activeAlerts[0].affectedLines.join(',')}] `}
                             </span>
-                          )}
-                        </span>
-                      ))}
+                            <span>{activeAlerts[0].headerText}</span>
+                            {activeAlerts[0].activePeriod?.start && (
+                              <span className="ml-2 opacity-80">
+                                {new Date(activeAlerts[0].activePeriod.start * 1000).toLocaleString('en-US', {
+                                  month: 'short',
+                                  day: 'numeric',
+                                  hour: 'numeric',
+                                  minute: '2-digit'
+                                })}
+                              </span>
+                            )}
+                          </div>
+                        ) : (
+                          <div className="animate-scroll whitespace-nowrap">
+                            {activeAlerts.map((alert) => (
+                              <span key={alert.id} className="inline-block mr-8">
+                                <span className="font-semibold">
+                                  {alert.affectedLines.length > 0 && `[${alert.affectedLines.join(',')}] `}
+                                </span>
+                                <span>{alert.headerText}</span>
+                                {alert.activePeriod?.start && (
+                                  <span className="ml-2 opacity-80">
+                                    {new Date(alert.activePeriod.start * 1000).toLocaleString('en-US', {
+                                      month: 'short',
+                                      day: 'numeric',
+                                      hour: 'numeric',
+                                      minute: '2-digit'
+                                    })}
+                                  </span>
+                                )}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  )}
-                </div>
+                  </div>
+                )}
+
+                {/* Planned Work - Blue */}
+                {plannedAlerts.length > 0 && (
+                  <div className="bg-blue-600 text-white px-2 py-1 rounded text-xs overflow-hidden relative">
+                    <div className="flex items-center gap-2">
+                      <span className="font-bold flex-shrink-0">🔧</span>
+                      <div className="flex-1 overflow-hidden relative">
+                        {plannedAlerts.length === 1 ? (
+                          <div className="whitespace-nowrap overflow-hidden text-ellipsis">
+                            <span className="font-semibold">
+                              {plannedAlerts[0].affectedLines.length > 0 && `[${plannedAlerts[0].affectedLines.join(',')}] `}
+                            </span>
+                            <span>{plannedAlerts[0].headerText}</span>
+                            {plannedAlerts[0].activePeriod?.start && (
+                              <span className="ml-2 opacity-80">
+                                {new Date(plannedAlerts[0].activePeriod.start * 1000).toLocaleString('en-US', {
+                                  month: 'short',
+                                  day: 'numeric',
+                                  hour: 'numeric',
+                                  minute: '2-digit'
+                                })}
+                              </span>
+                            )}
+                          </div>
+                        ) : (
+                          <div className="animate-scroll whitespace-nowrap">
+                            {plannedAlerts.map((alert) => (
+                              <span key={alert.id} className="inline-block mr-8">
+                                <span className="font-semibold">
+                                  {alert.affectedLines.length > 0 && `[${alert.affectedLines.join(',')}] `}
+                                </span>
+                                <span>{alert.headerText}</span>
+                                {alert.activePeriod?.start && (
+                                  <span className="ml-2 opacity-80">
+                                    {new Date(alert.activePeriod.start * 1000).toLocaleString('en-US', {
+                                      month: 'short',
+                                      day: 'numeric',
+                                      hour: 'numeric',
+                                      minute: '2-digit'
+                                    })}
+                                  </span>
+                                )}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
-            </div>
-          )}
+            );
+          })()}
           <style jsx>{`
             @keyframes scroll {
               0% {
@@ -211,7 +348,7 @@ export default function Home() {
             }
             .animate-scroll {
               display: inline-block;
-              animation: scroll 30s linear infinite;
+              animation: scroll 40s linear infinite;
             }
           `}</style>
         </div>
@@ -252,7 +389,13 @@ export default function Home() {
                           {northStation ? (
                             <div>
                               <h3 className="text-xs font-medium mb-1">{northStation.direction}</h3>
-                              <div className="max-h-32 overflow-y-auto space-y-1">
+                              <div
+                                className="max-h-32 overflow-y-auto space-y-1 cursor-pointer"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  toggleTimeFormat(`${baseId}N`);
+                                }}
+                              >
                                 {northStation.trains.map((train, index) => (
                                   <div
                                     key={index}
@@ -272,7 +415,10 @@ export default function Home() {
                                     </div>
                                     <div className="text-center">
                                       <p className="text-sm font-bold">
-                                        {train.rawEta < 60 ? "0" : Math.floor(train.rawEta / 60)}m
+                                        {showTimeFormat.has(`${baseId}N`)
+                                          ? formatArrivalTime(train.rawEta)
+                                          : `${train.rawEta < 60 ? "0" : Math.floor(train.rawEta / 60)}m`
+                                        }
                                       </p>
                                     </div>
                                   </div>
@@ -287,7 +433,13 @@ export default function Home() {
                           {southStation ? (
                             <div>
                               <h3 className="text-xs font-medium mb-1">{southStation.direction}</h3>
-                              <div className="max-h-32 overflow-y-auto space-y-1">
+                              <div
+                                className="max-h-32 overflow-y-auto space-y-1 cursor-pointer"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  toggleTimeFormat(`${baseId}S`);
+                                }}
+                              >
                                 {southStation.trains.map((train, index) => (
                                   <div
                                     key={index}
@@ -307,7 +459,10 @@ export default function Home() {
                                     </div>
                                     <div className="text-center">
                                       <p className="text-sm font-bold">
-                                        {train.rawEta < 60 ? "0" : Math.floor(train.rawEta / 60)}m
+                                        {showTimeFormat.has(`${baseId}S`)
+                                          ? formatArrivalTime(train.rawEta)
+                                          : `${train.rawEta < 60 ? "0" : Math.floor(train.rawEta / 60)}m`
+                                        }
                                       </p>
                                     </div>
                                   </div>
@@ -345,7 +500,13 @@ export default function Home() {
                         {northStation && (
                           <div className="mb-2">
                             <h3 className="text-xs font-medium mb-1">{northStation.direction}</h3>
-                            <ul className="space-y-1">
+                            <ul
+                              className="space-y-1 cursor-pointer"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                toggleTimeFormat(`${baseId}N`);
+                              }}
+                            >
                               {northStation.trains.slice(0, 2).map((train, index) => (
                                 <li
                                   key={index}
@@ -365,7 +526,10 @@ export default function Home() {
                                   </div>
                                   <div className="text-center">
                                     <p className="text-sm font-bold">
-                                      {train.rawEta < 60 ? "0" : Math.floor(train.rawEta / 60)}m
+                                      {showTimeFormat.has(`${baseId}N`)
+                                        ? formatArrivalTime(train.rawEta)
+                                        : `${train.rawEta < 60 ? "0" : Math.floor(train.rawEta / 60)}m`
+                                      }
                                     </p>
                                   </div>
                                 </li>
@@ -378,7 +542,13 @@ export default function Home() {
                         {southStation && (
                           <div>
                             <h3 className="text-xs font-medium mb-1">{southStation.direction}</h3>
-                            <ul className="space-y-1">
+                            <ul
+                              className="space-y-1 cursor-pointer"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                toggleTimeFormat(`${baseId}S`);
+                              }}
+                            >
                               {southStation.trains.slice(0, 2).map((train, index) => (
                                 <li
                                   key={index}
@@ -398,7 +568,10 @@ export default function Home() {
                                   </div>
                                   <div className="text-center">
                                     <p className="text-sm font-bold">
-                                      {train.rawEta < 60 ? "0" : Math.floor(train.rawEta / 60)}m
+                                      {showTimeFormat.has(`${baseId}S`)
+                                        ? formatArrivalTime(train.rawEta)
+                                        : `${train.rawEta < 60 ? "0" : Math.floor(train.rawEta / 60)}m`
+                                      }
                                     </p>
                                   </div>
                                 </li>
@@ -426,7 +599,13 @@ export default function Home() {
                   .map(([stationId, stationData]) => (
                   <div key={stationId} className="mb-8">
                     <h2 className="text-xl font-semibold mb-4">{stationData.name} ({stationData.direction})</h2>
-                    <ul className="space-y-2">
+                    <ul
+                      className="space-y-2 cursor-pointer"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleTimeFormat(stationId);
+                      }}
+                    >
                       {stationData.trains.slice(0, MAX_NUM).map((train, index) => (
                         <li
                           key={index}
@@ -439,12 +618,20 @@ export default function Home() {
                             </p>
                           </div>
                           <div className="text-center">
-                            <p className="text-2xl font-bold">
-                              {train.rawEta < 60 ? "0" : Math.floor(train.rawEta / 60)}
-                            </p>
-                            <p className="text-xs">
-                              min
-                            </p>
+                            {showTimeFormat.has(stationId) ? (
+                              <p className="text-2xl font-bold">
+                                {formatArrivalTime(train.rawEta)}
+                              </p>
+                            ) : (
+                              <>
+                                <p className="text-2xl font-bold">
+                                  {train.rawEta < 60 ? "0" : Math.floor(train.rawEta / 60)}
+                                </p>
+                                <p className="text-xs">
+                                  min
+                                </p>
+                              </>
+                            )}
                           </div>
                         </li>
                       ))}

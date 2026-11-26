@@ -19,27 +19,8 @@ async function loadProtobuf() {
   }
 }
 
-// Feed URLs for different line groups
-const FEED_URLS = {
-  'ACE': 'https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-ace',
-  'BDFM': 'https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-bdfm',
-  'G': 'https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-g',
-  'JZ': 'https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-jz',
-  'NQRW': 'https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-nqrw',
-  'L': 'https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-l',
-  '1234567': 'https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs',
-};
-
-function getFeedForLine(line) {
-  if (['A', 'C', 'E'].includes(line)) return 'ACE';
-  if (['B', 'D', 'F', 'M'].includes(line)) return 'BDFM';
-  if (line === 'G') return 'G';
-  if (['J', 'Z'].includes(line)) return 'JZ';
-  if (['N', 'Q', 'R', 'W'].includes(line)) return 'NQRW';
-  if (line === 'L') return 'L';
-  if (['1', '2', '3', '4', '5', '6', '7'].includes(line)) return '1234567';
-  return null;
-}
+// Service alerts feed URL
+const ALERTS_FEED_URL = 'https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/camsys%2Fsubway-alerts';
 
 export default async function handler(req, res) {
   const { lines: linesParam } = req.query;
@@ -51,64 +32,72 @@ export default async function handler(req, res) {
   await loadProtobuf();
 
   try {
-    const requestedLines = linesParam.split(',');
-    const feeds = new Set();
-
-    // Get relevant feeds
-    requestedLines.forEach(line => {
-      const feed = getFeedForLine(line);
-      if (feed) feeds.add(feed);
-    });
+    const requestedLines = linesParam.split(',').filter(l => l && /^[A-Z0-9]+$/.test(l));
+    if (requestedLines.length === 0) {
+      return res.status(200).json({ alerts: [] });
+    }
 
     const allAlerts = [];
 
-    // Fetch alerts from each feed
-    for (const feedKey of feeds) {
-      try {
-        const response = await fetch(FEED_URLS[feedKey]);
-        const buffer = await response.arrayBuffer();
-        const message = FeedMessage.decode(new Uint8Array(buffer));
+    // Fetch from the unified service alerts feed
+    try {
+      const response = await fetch(ALERTS_FEED_URL);
+      const buffer = await response.arrayBuffer();
+      const message = FeedMessage.decode(new Uint8Array(buffer));
 
-        message.entity.forEach(entity => {
-          if (entity.alert) {
-            const alert = entity.alert;
+      message.entity.forEach(entity => {
+        if (entity.alert) {
+          const alert = entity.alert;
 
-            // Extract affected lines
-            const affectedLines = new Set();
-            if (alert.informedEntity) {
-              alert.informedEntity.forEach(ie => {
-                if (ie.routeId) {
-                  affectedLines.add(ie.routeId);
-                }
-              });
-            }
-
-            // Check if any requested lines are affected
-            const relevantLines = [...affectedLines].filter(l => requestedLines.includes(l));
-            if (relevantLines.length > 0 || affectedLines.size === 0) {
-              const headerText = alert.headerText?.translation?.[0]?.text || 'Service Alert';
-              const descText = alert.descriptionText?.translation?.[0]?.text || '';
-
-              allAlerts.push({
-                id: entity.id,
-                headerText: headerText,
-                descriptionText: descText,
-                affectedLines: [...affectedLines],
-                activePeriod: alert.activePeriod?.[0] ? {
-                  start: alert.activePeriod[0].start ? Number(alert.activePeriod[0].start) : null,
-                  end: alert.activePeriod[0].end ? Number(alert.activePeriod[0].end) : null,
-                } : null,
-              });
-            }
+          // Extract affected lines
+          const affectedLines = new Set();
+          if (alert.informedEntity) {
+            alert.informedEntity.forEach(ie => {
+              if (ie.routeId) {
+                affectedLines.add(ie.routeId);
+              }
+            });
           }
-        });
-      } catch (error) {
-        console.error(`Error fetching alerts for ${feedKey}:`, error.message);
-      }
+
+          // Check if any requested lines are affected
+          const relevantLines = [...affectedLines].filter(l => requestedLines.includes(l));
+          if (relevantLines.length > 0) {
+            const headerText = alert.headerText?.translation?.[0]?.text || 'Service Alert';
+            const descText = alert.descriptionText?.translation?.[0]?.text || '';
+
+            // Determine if it's planned work
+            // Check GTFS cause field: MAINTENANCE (9) or CONSTRUCTION (10)
+            // Also check entity ID for "planned_work" as MTA doesn't always set cause correctly
+            const isPlanned = alert.cause === 9 || alert.cause === 10 ||
+                            (entity.id && entity.id.includes('planned_work'));
+
+            allAlerts.push({
+              id: entity.id,
+              headerText: headerText,
+              descriptionText: descText,
+              affectedLines: [...affectedLines],
+              activePeriod: alert.activePeriod?.[0] ? {
+                start: alert.activePeriod[0].start ? Number(alert.activePeriod[0].start) : null,
+                end: alert.activePeriod[0].end ? Number(alert.activePeriod[0].end) : null,
+              } : null,
+              isPlanned: isPlanned,
+              cause: alert.cause || 1,
+              effect: alert.effect || 8,
+            });
+          }
+        }
+      });
+    } catch (error) {
+      console.error('Error fetching service alerts:', error.message);
     }
 
-    // Sort by start time (most recent first)
+    // Sort by planned status first (active alerts first), then by start time
     allAlerts.sort((a, b) => {
+      // Active alerts before planned
+      if (!a.isPlanned && b.isPlanned) return -1;
+      if (a.isPlanned && !b.isPlanned) return 1;
+
+      // Then sort by start time (most recent first)
       const aTime = a.activePeriod?.start || 0;
       const bTime = b.activePeriod?.start || 0;
       return bTime - aTime;
