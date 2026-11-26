@@ -28,6 +28,7 @@ export default function Home() {
   } | null>(null);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [stations, setStations] = useState("A40N,A40S,231N,231S");
+  const [showSettings, setShowSettings] = useState(true);
 
   // Load stations from localStorage
   useEffect(() => {
@@ -74,14 +75,23 @@ export default function Home() {
   });
 
   return (
-    <div className="min-h-screen font-sans relative">
-      {/* Settings button - large touch target */}
-      <a
-        href="/setup"
-        className="fixed top-4 right-4 bg-gray-700 hover:bg-gray-600 active:bg-gray-500 text-white p-4 rounded-lg text-xl font-bold z-10 min-w-[80px] min-h-[80px] flex items-center justify-center"
-      >
-        ⚙️
-      </a>
+    <div
+      className="min-h-screen font-sans relative"
+      onClick={(e) => {
+        // Toggle settings visibility when clicking the display area (not the button itself)
+        if ((e.target as HTMLElement).closest('a, button')) return;
+        setShowSettings(!showSettings);
+      }}
+    >
+      {/* Settings button - large touch target, toggleable */}
+      {showSettings && (
+        <a
+          href="/setup"
+          className="fixed top-4 right-4 bg-gray-700 hover:bg-gray-600 active:bg-gray-500 text-white p-4 rounded-lg text-xl font-bold z-10 min-w-[80px] min-h-[80px] flex items-center justify-center"
+        >
+          ⚙️
+        </a>
+      )}
 
       {TWO_COL && <h1 className="text-2xl font-bold px-16 pt-4 text-center">{timeString}</h1>}
       <div className={TWO_COL ? "flex flex-1 items-center justify-center" : "flex min-h-screen items-center justify-center"}>
