@@ -75,12 +75,10 @@ export default function SetupPage() {
   };
 
   const saveConfiguration = () => {
-    if (selectedStations.length === 0) {
-      alert("Please select at least one station");
-      return;
+    // Allow saving even with no stations selected (just saving display mode)
+    if (selectedStations.length > 0) {
+      localStorage.setItem("selectedStations", selectedStations.join(","));
     }
-
-    localStorage.setItem("selectedStations", selectedStations.join(","));
     localStorage.setItem("compactMode", compactMode.toString());
     setShowSaved(true);
     setTimeout(() => {
@@ -192,8 +190,7 @@ export default function SetupPage() {
             </button>
             <button
               onClick={saveConfiguration}
-              className="bg-green-600 hover:bg-green-700 p-6 rounded-lg text-xl font-semibold disabled:bg-gray-600 disabled:cursor-not-allowed"
-              disabled={selectedStations.length === 0}
+              className="bg-green-600 hover:bg-green-700 p-6 rounded-lg text-xl font-semibold"
             >
               Save & Go
             </button>
