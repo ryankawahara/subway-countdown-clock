@@ -28,7 +28,7 @@ export default function Home() {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [stations, setStations] = useState("A40N,A40S,231N,231S");
   const [showSettings, setShowSettings] = useState(true);
-  const [compactMode, setCompactMode] = useState(false);
+  const [displayMode, setDisplayMode] = useState<"normal" | "compact" | "portrait">("normal");
 
   // Load stations and display mode from localStorage
   useEffect(() => {
@@ -36,9 +36,15 @@ export default function Home() {
     if (savedStations) {
       setStations(savedStations);
     }
-    const savedCompactMode = localStorage.getItem("compactMode");
-    if (savedCompactMode === "true") {
-      setCompactMode(true);
+    const savedDisplayMode = localStorage.getItem("displayMode");
+    if (savedDisplayMode === "compact" || savedDisplayMode === "portrait") {
+      setDisplayMode(savedDisplayMode);
+    } else {
+      // Legacy support for old compactMode setting
+      const savedCompactMode = localStorage.getItem("compactMode");
+      if (savedCompactMode === "true") {
+        setDisplayMode("compact");
+      }
     }
   }, []);
 
@@ -97,14 +103,23 @@ export default function Home() {
         </a>
       )}
 
-      {compactMode && <h1 className="text-xl font-bold px-4 pt-2 text-center">{timeString}</h1>}
-      <div className={compactMode ? "flex flex-1 items-start justify-center pt-2" : "flex min-h-screen items-center justify-center"}>
-        <main className={`flex w-full flex-col ${compactMode ? "px-4 max-w-full" : "px-16 max-w-3xl"}`}>
-          {!compactMode && <h1 className="text-2xl font-bold">{timeString}</h1>}
-          <div className={compactMode ? "" : "mt-4"}>
+      {(displayMode === "compact" || displayMode === "portrait") && (
+        <h1 className="text-xl font-bold px-4 pt-2 text-center">{timeString}</h1>
+      )}
+      <div className={
+        displayMode === "normal"
+          ? "flex min-h-screen items-center justify-center"
+          : "flex flex-1 items-start justify-center pt-2"
+      }>
+        <main className={`flex w-full flex-col ${
+          displayMode === "normal" ? "px-16 max-w-3xl" : "px-4 max-w-full"
+        }`}>
+          {displayMode === "normal" && <h1 className="text-2xl font-bold">{timeString}</h1>}
+          <div className={displayMode === "normal" ? "mt-4" : ""}>
           {mtaData ? (
-            compactMode ? (
-              <div className="grid grid-cols-2 gap-3">
+            displayMode === "portrait" ? (
+              // Portrait mode - single column, optimized for 480x800
+              <div className="space-y-1">
                 {/* Group stations by base ID (without N/S suffix) */}
                 {(() => {
                   // Get unique base station IDs
@@ -191,7 +206,96 @@ export default function Home() {
                   });
                 })()}
               </div>
+            ) : displayMode === "compact" ? (
+              // Compact mode - 2 columns, optimized for 800x480
+              <div className="grid grid-cols-2 gap-3">
+                {/* Same content as portrait but in 2 columns */}
+                {(() => {
+                  const baseStationIds = [...new Set(
+                    Object.keys(mtaData.stations).map(id => id.slice(0, -1))
+                  )];
+
+                  return baseStationIds.map(baseId => {
+                    const northStation = mtaData.stations[`${baseId}N`];
+                    const southStation = mtaData.stations[`${baseId}S`];
+                    const stationName = northStation?.name || southStation?.name || baseId;
+
+                    return (
+                      <div key={baseId} className="text-xs">
+                        <h2 className="text-sm font-semibold mb-1">{stationName}</h2>
+
+                        {/* Northbound direction */}
+                        {northStation && (
+                          <div className="mb-2">
+                            <h3 className="text-xs font-medium mb-1">{northStation.direction}</h3>
+                            <ul className="space-y-1">
+                              {northStation.trains.slice(0, 2).map((train, index) => (
+                                <li
+                                  key={index}
+                                  className="p-1 rounded bg-gray-600 flex items-center gap-1"
+                                >
+                                  <div className="inline-flex items-center justify-center w-5 h-5 rounded-full font-bold text-xs"
+                                       style={{
+                                         backgroundColor: subwayColors.lines[train.trainId as keyof typeof subwayColors.lines]?.hex_color || "#808183",
+                                         color: ["N", "Q", "R", "W"].includes(train.trainId) ? "#000000" : "#FFFFFF"
+                                       }}>
+                                    {train.trainId}
+                                  </div>
+                                  <div className="flex-1 min-w-0">
+                                    <p className="text-xs truncate">
+                                      {train.destination}
+                                    </p>
+                                  </div>
+                                  <div className="text-center">
+                                    <p className="text-sm font-bold">
+                                      {train.rawEta < 60 ? "0" : Math.floor(train.rawEta / 60)}m
+                                    </p>
+                                  </div>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+
+                        {/* Southbound direction */}
+                        {southStation && (
+                          <div>
+                            <h3 className="text-xs font-medium mb-1">{southStation.direction}</h3>
+                            <ul className="space-y-1">
+                              {southStation.trains.slice(0, 2).map((train, index) => (
+                                <li
+                                  key={index}
+                                  className="p-1 rounded bg-gray-600 flex items-center gap-1"
+                                >
+                                  <div className="inline-flex items-center justify-center w-5 h-5 rounded-full font-bold text-xs"
+                                       style={{
+                                         backgroundColor: subwayColors.lines[train.trainId as keyof typeof subwayColors.lines]?.hex_color || "#808183",
+                                         color: ["N", "Q", "R", "W"].includes(train.trainId) ? "#000000" : "#FFFFFF"
+                                       }}>
+                                    {train.trainId}
+                                  </div>
+                                  <div className="flex-1 min-w-0">
+                                    <p className="text-xs truncate">
+                                      {train.destination}
+                                    </p>
+                                  </div>
+                                  <div className="text-center">
+                                    <p className="text-sm font-bold">
+                                      {train.rawEta < 60 ? "0" : Math.floor(train.rawEta / 60)}m
+                                    </p>
+                                  </div>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  });
+                })()}
+              </div>
             ) : (
+              // Normal mode - single column, large text
               <div>
                 {Object.entries(mtaData.stations)
                   .sort(([a], [b]) => {

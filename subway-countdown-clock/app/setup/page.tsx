@@ -30,7 +30,7 @@ export default function SetupPage() {
   const [selectedStations, setSelectedStations] = useState<string[]>([]);
   const [showSaved, setShowSaved] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [compactMode, setCompactMode] = useState(false);
+  const [displayMode, setDisplayMode] = useState<"normal" | "compact" | "portrait">("normal");
 
   // Load saved stations and display mode from localStorage
   useEffect(() => {
@@ -38,9 +38,15 @@ export default function SetupPage() {
     if (saved) {
       setSelectedStations(saved.split(","));
     }
-    const savedCompactMode = localStorage.getItem("compactMode");
-    if (savedCompactMode === "true") {
-      setCompactMode(true);
+    const savedDisplayMode = localStorage.getItem("displayMode");
+    if (savedDisplayMode === "compact" || savedDisplayMode === "portrait") {
+      setDisplayMode(savedDisplayMode);
+    } else {
+      // Legacy support
+      const savedCompactMode = localStorage.getItem("compactMode");
+      if (savedCompactMode === "true") {
+        setDisplayMode("compact");
+      }
     }
   }, []);
 
@@ -79,7 +85,7 @@ export default function SetupPage() {
     if (selectedStations.length > 0) {
       localStorage.setItem("selectedStations", selectedStations.join(","));
     }
-    localStorage.setItem("compactMode", compactMode.toString());
+    localStorage.setItem("displayMode", displayMode);
     setShowSaved(true);
     setTimeout(() => {
       router.push("/");
@@ -126,28 +132,39 @@ export default function SetupPage() {
 
           <div className="mt-8 p-4 bg-gray-800 rounded-lg">
             <h2 className="text-lg font-semibold mb-4">Display Mode</h2>
-            <div className="grid grid-cols-2 gap-3 mb-6">
+            <div className="grid grid-cols-3 gap-3 mb-6">
               <button
-                onClick={() => setCompactMode(false)}
-                className={`p-6 rounded-lg text-lg font-semibold transition-colors ${
-                  !compactMode
+                onClick={() => setDisplayMode("normal")}
+                className={`p-5 rounded-lg text-base font-semibold transition-colors ${
+                  displayMode === "normal"
                     ? "bg-blue-600 hover:bg-blue-700"
                     : "bg-gray-700 hover:bg-gray-600"
                 }`}
               >
-                {!compactMode ? "✓ " : ""}Normal
-                <div className="text-xs font-normal mt-1">Larger text</div>
+                {displayMode === "normal" ? "✓ " : ""}Normal
+                <div className="text-xs font-normal mt-1">Larger</div>
               </button>
               <button
-                onClick={() => setCompactMode(true)}
-                className={`p-6 rounded-lg text-lg font-semibold transition-colors ${
-                  compactMode
+                onClick={() => setDisplayMode("compact")}
+                className={`p-5 rounded-lg text-base font-semibold transition-colors ${
+                  displayMode === "compact"
                     ? "bg-blue-600 hover:bg-blue-700"
                     : "bg-gray-700 hover:bg-gray-600"
                 }`}
               >
-                {compactMode ? "✓ " : ""}Compact
+                {displayMode === "compact" ? "✓ " : ""}Compact
                 <div className="text-xs font-normal mt-1">800x480</div>
+              </button>
+              <button
+                onClick={() => setDisplayMode("portrait")}
+                className={`p-5 rounded-lg text-base font-semibold transition-colors ${
+                  displayMode === "portrait"
+                    ? "bg-blue-600 hover:bg-blue-700"
+                    : "bg-gray-700 hover:bg-gray-600"
+                }`}
+              >
+                {displayMode === "portrait" ? "✓ " : ""}Portrait
+                <div className="text-xs font-normal mt-1">480x800</div>
               </button>
             </div>
           </div>
