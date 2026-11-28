@@ -34,34 +34,67 @@ type ServiceAlert = {
 
 export default function Home() {
   const [mtaData, setMtaData] = useState<{
-    stations: Record<string, { name: string; direction: string; trains: { trainId: string; rawEta: number; destination: string }[] }>;
+    stations: Record<string, { name: string; direction: string; trains: { trainId: string; rawEta: number; destination: string; delay?: number }[] }>;
   } | null>(null);
   const [serviceAlerts, setServiceAlerts] = useState<ServiceAlert[]>([]);
   const [currentTime, setCurrentTime] = useState(new Date());
-  const [stations, setStations] = useState("A40N,A40S,231N,231S");
+  const [stations, setStations] = useState<string | null>(null); // null until loaded from localStorage
   const [showSettings, setShowSettings] = useState(true);
-  const [displayMode, setDisplayMode] = useState<"normal" | "compact" | "portrait">("normal");
+  const [displayMode, setDisplayMode] = useState<"normal" | "compact" | "portrait">("portrait");
   const [showTimeFormat, setShowTimeFormat] = useState<Set<string>>(new Set());
+  const [expandedAlert, setExpandedAlert] = useState<ServiceAlert | null>(null);
+  const [showDebug, setShowDebug] = useState(false);
+  const [viewportSize, setViewportSize] = useState({ width: 0, height: 0 });
 
-  // Load stations and display mode from localStorage
+  // Track viewport size for debug
   useEffect(() => {
-    const savedStations = localStorage.getItem("selectedStations");
-    if (savedStations) {
-      setStations(savedStations);
+    const updateSize = () => {
+      setViewportSize({ width: window.innerWidth, height: window.innerHeight });
+    };
+    updateSize();
+    window.addEventListener('resize', updateSize);
+    return () => window.removeEventListener('resize', updateSize);
+  }, []);
+
+  // Load stations and display mode from localStorage or URL params
+  useEffect(() => {
+    // Check URL params first (allows setting via URL)
+    const urlParams = new URLSearchParams(window.location.search);
+
+    // Check for debug mode
+    if (urlParams.get("debug") === "true") {
+      setShowDebug(true);
     }
-    const savedDisplayMode = localStorage.getItem("displayMode");
-    if (savedDisplayMode === "compact" || savedDisplayMode === "portrait") {
-      setDisplayMode(savedDisplayMode);
+    const urlMode = urlParams.get("mode");
+    const urlStations = urlParams.get("stations");
+
+    if (urlStations) {
+      setStations(urlStations);
+      localStorage.setItem("selectedStations", urlStations);
     } else {
-      // Legacy support for old compactMode setting
-      const savedCompactMode = localStorage.getItem("compactMode");
-      if (savedCompactMode === "true") {
-        setDisplayMode("compact");
+      const savedStations = localStorage.getItem("selectedStations");
+      // Use saved stations or default (High St A/C, Clark St 2/3, York St F)
+      setStations(savedStations || "A40N,A40S,231N,231S,F18N,F18S");
+    }
+
+    if (urlMode === "portrait" || urlMode === "compact" || urlMode === "normal") {
+      setDisplayMode(urlMode);
+      localStorage.setItem("displayMode", urlMode);
+    } else {
+      const savedDisplayMode = localStorage.getItem("displayMode");
+      if (savedDisplayMode === "compact" || savedDisplayMode === "portrait" || savedDisplayMode === "normal") {
+        setDisplayMode(savedDisplayMode);
+      } else {
+        // Default to portrait mode
+        setDisplayMode("portrait");
       }
     }
   }, []);
 
   useEffect(() => {
+    // Don't fetch until stations are loaded from localStorage
+    if (stations === null) return;
+
     async function fetchMTA() {
       try {
         const response = await fetch(`/api/mta?stations=${stations}`);
@@ -72,7 +105,7 @@ export default function Home() {
       }
     }
 
-    // Fetch data immediately on component mount
+    // Fetch data immediately
     fetchMTA();
 
     // Set up an interval to fetch data every 30 seconds
@@ -84,12 +117,18 @@ export default function Home() {
 
   // Fetch service alerts
   useEffect(() => {
+    // Don't fetch until stations are loaded from localStorage
+    if (!stations) return;
+
+    // Capture stations value for use in async function
+    const stationList = stations;
+
     async function fetchAlerts() {
       try {
         // Extract unique lines from stations
         // A40N -> A, 231N -> 2,3 (numbers are individual lines)
         const lines = [...new Set(
-          stations.split(',').flatMap(s => {
+          stationList.split(',').flatMap(s => {
             const match = s.match(/^([A-Z]+)|(\d+)/g);
             if (!match) return [];
             return match.map(m => m.match(/[A-Z]/) ? m : m.split('').filter(c => /\d/.test(c))).flat();
@@ -188,7 +227,7 @@ export default function Home() {
 
   return (
     <div
-      className="min-h-screen font-sans relative"
+      className="h-screen font-sans relative overflow-hidden flex flex-col"
       onClick={(e) => {
         // Toggle settings visibility when clicking the display area (not the button itself)
         if ((e.target as HTMLElement).closest('a, button')) return;
@@ -205,11 +244,69 @@ export default function Home() {
         </a>
       )}
 
+      {/* Expanded Alert Modal */}
+      {expandedAlert && (
+        <div
+          className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4"
+          onClick={() => setExpandedAlert(null)}
+        >
+          <div
+            className={`${expandedAlert.isPlanned ? 'bg-blue-600' : 'bg-red-600'} text-white p-6 rounded-lg max-w-md w-full max-h-[80vh] overflow-y-auto`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-start gap-3 mb-4">
+              <span className="text-2xl">{expandedAlert.isPlanned ? '🔧' : '⚠'}</span>
+              <div>
+                {expandedAlert.affectedLines.length > 0 && (
+                  <div className="flex gap-1 mb-2">
+                    {expandedAlert.affectedLines.map(line => (
+                      <span
+                        key={line}
+                        className="inline-flex items-center justify-center w-6 h-6 rounded-full font-bold text-xs"
+                        style={{
+                          backgroundColor: subwayColors.lines[line as keyof typeof subwayColors.lines]?.hex_color || "#808183",
+                          color: ["N", "Q", "R", "W"].includes(line) ? "#000000" : "#FFFFFF"
+                        }}
+                      >
+                        {line}
+                      </span>
+                    ))}
+                  </div>
+                )}
+                <h3 className="text-lg font-bold">{expandedAlert.headerText}</h3>
+              </div>
+            </div>
+            <p className="text-base leading-relaxed whitespace-pre-wrap">{expandedAlert.descriptionText}</p>
+            {expandedAlert.activePeriod?.start && (
+              <p className="mt-4 text-sm opacity-80">
+                {new Date(expandedAlert.activePeriod.start * 1000).toLocaleString('en-US', {
+                  weekday: 'short',
+                  month: 'short',
+                  day: 'numeric',
+                  hour: 'numeric',
+                  minute: '2-digit'
+                })}
+                {expandedAlert.activePeriod.end && (
+                  <> - {new Date(expandedAlert.activePeriod.end * 1000).toLocaleString('en-US', {
+                    weekday: 'short',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: 'numeric',
+                    minute: '2-digit'
+                  })}</>
+                )}
+              </p>
+            )}
+            <p className="mt-4 text-center text-sm opacity-60">Tap anywhere to close</p>
+          </div>
+        </div>
+      )}
+
       {(displayMode === "compact" || displayMode === "portrait") && (
-        <div className="px-2 pt-1">
+        <div className="px-3 pt-2 flex-shrink-0">
           {/* Time and Service Alerts Header */}
           <div className="flex items-center justify-between mb-1">
-            <h1 className="text-sm font-bold">{timeString}</h1>
+            <h1 className="text-lg font-bold">{timeString}</h1>
           </div>
 
           {/* Service Alerts Ticker */}
@@ -237,49 +334,49 @@ export default function Home() {
               <div className="space-y-1">
                 {/* Active Alerts - Red/Orange */}
                 {activeAlerts.length > 0 && (
-                  <div className="bg-red-600 text-white px-2 py-1 rounded text-xs overflow-hidden relative">
+                  <div
+                    className="bg-red-600 text-white px-3 py-2 rounded text-base overflow-hidden relative cursor-pointer"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setExpandedAlert(activeAlerts[0]);
+                    }}
+                  >
                     <div className="flex items-center gap-2">
                       <span className="font-bold flex-shrink-0">⚠</span>
                       <div className="flex-1 overflow-hidden relative">
-                        {activeAlerts.length === 1 ? (
-                          <div className="whitespace-nowrap overflow-hidden text-ellipsis">
-                            <span className="font-semibold">
-                              {activeAlerts[0].affectedLines.length > 0 && `[${activeAlerts[0].affectedLines.join(',')}] `}
+                        <div className="animate-scroll whitespace-nowrap">
+                          {activeAlerts.map((alert) => (
+                            <span
+                              key={alert.id}
+                              className="inline-block mr-16"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setExpandedAlert(alert);
+                              }}
+                            >
+                              <span className="font-semibold">
+                                {alert.affectedLines.length > 0 && `[${alert.affectedLines.join(',')}] `}
+                              </span>
+                              <span>{alert.headerText}</span>
                             </span>
-                            <span>{activeAlerts[0].headerText}</span>
-                            {activeAlerts[0].activePeriod?.start && (
-                              <span className="ml-2 opacity-80">
-                                {new Date(activeAlerts[0].activePeriod.start * 1000).toLocaleString('en-US', {
-                                  month: 'short',
-                                  day: 'numeric',
-                                  hour: 'numeric',
-                                  minute: '2-digit'
-                                })}
+                          ))}
+                          {/* Duplicate for seamless loop */}
+                          {activeAlerts.map((alert) => (
+                            <span
+                              key={`${alert.id}-dup`}
+                              className="inline-block mr-16"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setExpandedAlert(alert);
+                              }}
+                            >
+                              <span className="font-semibold">
+                                {alert.affectedLines.length > 0 && `[${alert.affectedLines.join(',')}] `}
                               </span>
-                            )}
-                          </div>
-                        ) : (
-                          <div className="animate-scroll whitespace-nowrap">
-                            {activeAlerts.map((alert) => (
-                              <span key={alert.id} className="inline-block mr-8">
-                                <span className="font-semibold">
-                                  {alert.affectedLines.length > 0 && `[${alert.affectedLines.join(',')}] `}
-                                </span>
-                                <span>{alert.headerText}</span>
-                                {alert.activePeriod?.start && (
-                                  <span className="ml-2 opacity-80">
-                                    {new Date(alert.activePeriod.start * 1000).toLocaleString('en-US', {
-                                      month: 'short',
-                                      day: 'numeric',
-                                      hour: 'numeric',
-                                      minute: '2-digit'
-                                    })}
-                                  </span>
-                                )}
-                              </span>
-                            ))}
-                          </div>
-                        )}
+                              <span>{alert.headerText}</span>
+                            </span>
+                          ))}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -287,49 +384,49 @@ export default function Home() {
 
                 {/* Planned Work - Blue */}
                 {plannedAlerts.length > 0 && (
-                  <div className="bg-blue-600 text-white px-2 py-1 rounded text-xs overflow-hidden relative">
+                  <div
+                    className="bg-blue-600 text-white px-3 py-2 rounded text-base overflow-hidden relative cursor-pointer"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setExpandedAlert(plannedAlerts[0]);
+                    }}
+                  >
                     <div className="flex items-center gap-2">
                       <span className="font-bold flex-shrink-0">🔧</span>
                       <div className="flex-1 overflow-hidden relative">
-                        {plannedAlerts.length === 1 ? (
-                          <div className="whitespace-nowrap overflow-hidden text-ellipsis">
-                            <span className="font-semibold">
-                              {plannedAlerts[0].affectedLines.length > 0 && `[${plannedAlerts[0].affectedLines.join(',')}] `}
+                        <div className="animate-scroll whitespace-nowrap">
+                          {plannedAlerts.map((alert) => (
+                            <span
+                              key={alert.id}
+                              className="inline-block mr-16"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setExpandedAlert(alert);
+                              }}
+                            >
+                              <span className="font-semibold">
+                                {alert.affectedLines.length > 0 && `[${alert.affectedLines.join(',')}] `}
+                              </span>
+                              <span>{alert.headerText}</span>
                             </span>
-                            <span>{plannedAlerts[0].headerText}</span>
-                            {plannedAlerts[0].activePeriod?.start && (
-                              <span className="ml-2 opacity-80">
-                                {new Date(plannedAlerts[0].activePeriod.start * 1000).toLocaleString('en-US', {
-                                  month: 'short',
-                                  day: 'numeric',
-                                  hour: 'numeric',
-                                  minute: '2-digit'
-                                })}
+                          ))}
+                          {/* Duplicate for seamless loop */}
+                          {plannedAlerts.map((alert) => (
+                            <span
+                              key={`${alert.id}-dup`}
+                              className="inline-block mr-16"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setExpandedAlert(alert);
+                              }}
+                            >
+                              <span className="font-semibold">
+                                {alert.affectedLines.length > 0 && `[${alert.affectedLines.join(',')}] `}
                               </span>
-                            )}
-                          </div>
-                        ) : (
-                          <div className="animate-scroll whitespace-nowrap">
-                            {plannedAlerts.map((alert) => (
-                              <span key={alert.id} className="inline-block mr-8">
-                                <span className="font-semibold">
-                                  {alert.affectedLines.length > 0 && `[${alert.affectedLines.join(',')}] `}
-                                </span>
-                                <span>{alert.headerText}</span>
-                                {alert.activePeriod?.start && (
-                                  <span className="ml-2 opacity-80">
-                                    {new Date(alert.activePeriod.start * 1000).toLocaleString('en-US', {
-                                      month: 'short',
-                                      day: 'numeric',
-                                      hour: 'numeric',
-                                      minute: '2-digit'
-                                    })}
-                                  </span>
-                                )}
-                              </span>
-                            ))}
-                          </div>
-                        )}
+                              <span>{alert.headerText}</span>
+                            </span>
+                          ))}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -337,42 +434,30 @@ export default function Home() {
               </div>
             );
           })()}
-          <style jsx>{`
-            @keyframes scroll {
-              0% {
-                transform: translateX(0);
-              }
-              100% {
-                transform: translateX(-50%);
-              }
-            }
-            .animate-scroll {
-              display: inline-block;
-              animation: scroll 40s linear infinite;
-            }
-          `}</style>
         </div>
       )}
       <div className={
         displayMode === "normal"
           ? "flex min-h-screen items-center justify-center"
-          : "flex flex-1 items-start justify-center pt-2"
+          : "flex-1 flex flex-col min-h-0"
       }>
-        <main className={`flex w-full flex-col ${
-          displayMode === "normal" ? "px-16 max-w-3xl" : "px-4 max-w-full"
+        <main className={`flex flex-col flex-1 min-h-0 ${
+          displayMode === "normal" ? "px-16 max-w-3xl w-full justify-center" : "px-3 w-full"
         }`}>
           {displayMode === "normal" && <h1 className="text-2xl font-bold">{timeString}</h1>}
-          <div className={displayMode === "normal" ? "mt-4" : ""}>
+          <div className={displayMode === "normal" ? "mt-4" : "flex-1 flex flex-col min-h-0"}>
           {mtaData ? (
             displayMode === "portrait" ? (
-              // Portrait mode - N/S side by side, optimized for 480x800
-              <div className="space-y-3">
+              // Portrait mode - optimized for 480x800, fills screen
+              <div className="flex flex-col flex-1 justify-between gap-1">
                 {/* Group stations by base ID (without N/S suffix) */}
                 {(() => {
                   // Get unique base station IDs
                   const baseStationIds = [...new Set(
                     Object.keys(mtaData.stations).map(id => id.slice(0, -1))
                   )];
+                  // Limit trains based on number of stations
+                  const maxTrains = baseStationIds.length <= 1 ? 4 : baseStationIds.length <= 2 ? 4 : 3;
 
                   return baseStationIds.map(baseId => {
                     const northStation = mtaData.stations[`${baseId}N`];
@@ -380,98 +465,84 @@ export default function Home() {
                     const stationName = northStation?.name || southStation?.name || baseId;
 
                     return (
-                      <div key={baseId} className="text-xs">
-                        <h2 className="text-sm font-semibold mb-1">{stationName}</h2>
+                      <div key={baseId} className="flex-1 flex flex-col">
+                        <h2 className="font-bold" style={{ fontSize: 'clamp(1rem, 2.5vh, 1.5rem)' }}>{stationName}</h2>
 
-                        {/* N/S side by side with scrollable overflow */}
-                        <div className="grid grid-cols-2 gap-2">
+                        {/* N/S side by side */}
+                        <div className="grid grid-cols-2 gap-2 flex-1">
                           {/* Northbound direction */}
-                          {northStation ? (
-                            <div>
-                              <h3 className="text-xs font-medium mb-1">{northStation.direction}</h3>
-                              <div
-                                className="max-h-32 overflow-y-auto space-y-1 cursor-pointer"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  toggleTimeFormat(`${baseId}N`);
-                                }}
-                              >
-                                {northStation.trains.map((train, index) => (
-                                  <div
-                                    key={index}
-                                    className="p-1 rounded bg-gray-600 flex items-center gap-1"
-                                  >
-                                    <div className="inline-flex items-center justify-center w-5 h-5 rounded-full font-bold text-xs"
-                                         style={{
-                                           backgroundColor: subwayColors.lines[train.trainId as keyof typeof subwayColors.lines]?.hex_color || "#808183",
-                                           color: ["N", "Q", "R", "W"].includes(train.trainId) ? "#000000" : "#FFFFFF"
-                                         }}>
-                                      {train.trainId}
-                                    </div>
-                                    <div className="flex-1 min-w-0">
-                                      <p className="text-xs truncate">
-                                        {train.destination}
-                                      </p>
-                                    </div>
-                                    <div className="text-center">
-                                      <p className="text-sm font-bold">
-                                        {showTimeFormat.has(`${baseId}N`)
-                                          ? formatArrivalTime(train.rawEta)
-                                          : `${train.rawEta < 60 ? "0" : Math.floor(train.rawEta / 60)}m`
-                                        }
-                                      </p>
-                                    </div>
+                          <div className="flex flex-col">
+                            <h3 className="text-gray-400" style={{ fontSize: 'clamp(0.75rem, 2vh, 1rem)' }}>{northStation?.direction || "Uptown"}</h3>
+                            <div className="flex flex-col flex-1 gap-1">
+                              {northStation?.trains.slice(0, maxTrains).map((train, index) => (
+                                <div
+                                  key={index}
+                                  className="flex-1 px-1 rounded bg-gray-700 flex items-stretch gap-1"
+                                >
+                                  <div className="flex items-center justify-center rounded-full font-bold flex-shrink-0"
+                                       style={{
+                                         width: '5vh',
+                                         height: '5vh',
+                                         fontSize: '3vh',
+                                         backgroundColor: subwayColors.lines[train.trainId as keyof typeof subwayColors.lines]?.hex_color || "#808183",
+                                         color: ["N", "Q", "R", "W"].includes(train.trainId) ? "#000000" : "#FFFFFF"
+                                       }}>
+                                    {train.trainId}
                                   </div>
-                                ))}
-                              </div>
+                                  <div className="flex-1 min-w-0 overflow-hidden flex items-center">
+                                    <span className="leading-tight line-clamp-2" style={{ fontSize: 'clamp(0.7rem, 1.8vh, 0.9rem)' }}>
+                                      {train.destination}
+                                    </span>
+                                  </div>
+                                  <div className="flex items-center flex-shrink-0">
+                                    <span className="font-bold" style={{ fontSize: 'clamp(1.5rem, 8vh, 4rem)' }}>
+                                      {train.rawEta < 60 ? "0" : Math.floor(train.rawEta / 60)}m
+                                    </span>
+                                  </div>
+                                </div>
+                              ))}
+                              {(!northStation || northStation.trains.length === 0) && (
+                                <div className="text-gray-500 py-2 flex-1 flex items-center" style={{ fontSize: 'clamp(0.75rem, 2vh, 1rem)' }}>No trains</div>
+                              )}
                             </div>
-                          ) : (
-                            <div className="text-gray-500 text-xs">No northbound trains</div>
-                          )}
+                          </div>
 
                           {/* Southbound direction */}
-                          {southStation ? (
-                            <div>
-                              <h3 className="text-xs font-medium mb-1">{southStation.direction}</h3>
-                              <div
-                                className="max-h-32 overflow-y-auto space-y-1 cursor-pointer"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  toggleTimeFormat(`${baseId}S`);
-                                }}
-                              >
-                                {southStation.trains.map((train, index) => (
-                                  <div
-                                    key={index}
-                                    className="p-1 rounded bg-gray-600 flex items-center gap-1"
-                                  >
-                                    <div className="inline-flex items-center justify-center w-5 h-5 rounded-full font-bold text-xs"
-                                         style={{
-                                           backgroundColor: subwayColors.lines[train.trainId as keyof typeof subwayColors.lines]?.hex_color || "#808183",
-                                           color: ["N", "Q", "R", "W"].includes(train.trainId) ? "#000000" : "#FFFFFF"
-                                         }}>
-                                      {train.trainId}
-                                    </div>
-                                    <div className="flex-1 min-w-0">
-                                      <p className="text-xs truncate">
-                                        {train.destination}
-                                      </p>
-                                    </div>
-                                    <div className="text-center">
-                                      <p className="text-sm font-bold">
-                                        {showTimeFormat.has(`${baseId}S`)
-                                          ? formatArrivalTime(train.rawEta)
-                                          : `${train.rawEta < 60 ? "0" : Math.floor(train.rawEta / 60)}m`
-                                        }
-                                      </p>
-                                    </div>
+                          <div className="flex flex-col">
+                            <h3 className="text-gray-400" style={{ fontSize: 'clamp(0.75rem, 2vh, 1rem)' }}>{southStation?.direction || "Downtown"}</h3>
+                            <div className="flex flex-col flex-1 gap-1">
+                              {southStation?.trains.slice(0, maxTrains).map((train, index) => (
+                                <div
+                                  key={index}
+                                  className="flex-1 px-1 rounded bg-gray-700 flex items-stretch gap-1"
+                                >
+                                  <div className="flex items-center justify-center rounded-full font-bold flex-shrink-0"
+                                       style={{
+                                         width: '5vh',
+                                         height: '5vh',
+                                         fontSize: '3vh',
+                                         backgroundColor: subwayColors.lines[train.trainId as keyof typeof subwayColors.lines]?.hex_color || "#808183",
+                                         color: ["N", "Q", "R", "W"].includes(train.trainId) ? "#000000" : "#FFFFFF"
+                                       }}>
+                                    {train.trainId}
                                   </div>
-                                ))}
-                              </div>
+                                  <div className="flex-1 min-w-0 overflow-hidden flex items-center">
+                                    <span className="leading-tight line-clamp-2" style={{ fontSize: 'clamp(0.7rem, 1.8vh, 0.9rem)' }}>
+                                      {train.destination}
+                                    </span>
+                                  </div>
+                                  <div className="flex items-center flex-shrink-0">
+                                    <span className="font-bold" style={{ fontSize: 'clamp(1.5rem, 8vh, 4rem)' }}>
+                                      {train.rawEta < 60 ? "0" : Math.floor(train.rawEta / 60)}m
+                                    </span>
+                                  </div>
+                                </div>
+                              ))}
+                              {(!southStation || southStation.trains.length === 0) && (
+                                <div className="text-gray-500 py-2 flex-1 flex items-center" style={{ fontSize: 'clamp(0.75rem, 2vh, 1rem)' }}>No trains</div>
+                              )}
                             </div>
-                          ) : (
-                            <div className="text-gray-500 text-xs">No southbound trains</div>
-                          )}
+                          </div>
                         </div>
                       </div>
                     );
@@ -645,6 +716,13 @@ export default function Home() {
           )}
           </div>
         </main>
+      </div>
+
+      {/* Debug overlay - always visible for now */}
+      <div className="fixed bottom-0 left-0 right-0 bg-black/90 text-green-400 p-2 text-xs font-mono z-50">
+        <div>BUILD: 2024-v1 | Viewport: {viewportSize.width}x{viewportSize.height}</div>
+        <div>Mode: {displayMode}</div>
+        <div>5vh = {Math.round(viewportSize.height * 0.05)}px | 8vh = {Math.round(viewportSize.height * 0.08)}px</div>
       </div>
     </div>
   );

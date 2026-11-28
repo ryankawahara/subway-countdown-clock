@@ -30,39 +30,72 @@ export default function SetupPage() {
   const [selectedStations, setSelectedStations] = useState<string[]>([]);
   const [showSaved, setShowSaved] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [displayMode, setDisplayMode] = useState<"normal" | "compact" | "portrait">("normal");
+  const [displayMode, setDisplayMode] = useState<"normal" | "compact" | "portrait">("portrait");
+  const [zoom, setZoom] = useState(100);
 
-  // Load saved stations and display mode from localStorage
+  // Load saved stations, display mode, and zoom from localStorage
   useEffect(() => {
     const saved = localStorage.getItem("selectedStations");
     if (saved) {
       setSelectedStations(saved.split(","));
     }
     const savedDisplayMode = localStorage.getItem("displayMode");
-    if (savedDisplayMode === "compact" || savedDisplayMode === "portrait") {
+    if (savedDisplayMode === "compact" || savedDisplayMode === "portrait" || savedDisplayMode === "normal") {
       setDisplayMode(savedDisplayMode);
-    } else {
-      // Legacy support
-      const savedCompactMode = localStorage.getItem("compactMode");
-      if (savedCompactMode === "true") {
-        setDisplayMode("compact");
+    }
+    // Default is already "portrait" from useState
+    const savedZoom = localStorage.getItem("zoom");
+    if (savedZoom) {
+      const zoomValue = parseInt(savedZoom, 10);
+      if (zoomValue >= 50 && zoomValue <= 200) {
+        setZoom(zoomValue);
       }
     }
   }, []);
 
+  // Map line groups to station ID prefixes
+  // MTA uses different prefixes for different subway divisions
+  const LINE_PREFIX_MAP: Record<string, string[]> = {
+    "1/2/3": ["1", "2", "3"],  // 1xx, 2xx, 3xx stations (1/2/3 lines share stations)
+    "4/5/6": ["4", "5", "6"],  // 4xx, 5xx, 6xx stations
+    "7": ["7"],                // 7xx stations
+    "A/C/E": ["A"],            // Axx stations
+    "B/D/F/M": ["B", "D", "F", "M"],  // B, D, F, M prefixed stations
+    "N/Q/R/W": ["N", "Q", "R"],       // N, Q, R prefixed stations
+    "G": ["G"],                // Gxx stations
+    "J/Z": ["J", "M"],         // J/Z share stations with M line in some areas
+    "L": ["L"],                // Lxx stations
+    "S": ["S", "H"],           // Shuttle lines (S and H prefixes)
+  };
+
   // Get stations for selected line
-  const getStationsForLine = (lines: string[]) => {
+  const getStationsForLine = (lineGroup: string) => {
     // Get base stations (without N/S suffix) that serve these lines
-    const stations: Record<string, Station> = {};
+    const stations: Station[] = [];
+    const prefixes = LINE_PREFIX_MAP[lineGroup] || [];
 
     Object.entries(stationData).forEach(([id, station]) => {
       // Skip entries with N/S suffix (platform-specific)
       if (id.endsWith("N") || id.endsWith("S")) return;
 
-      stations[id] = station as Station;
+      // Check if station ID starts with any of the valid prefixes for this line group
+      const matchesLine = prefixes.some(prefix => {
+        if (prefix.length === 1 && /[0-9]/.test(prefix)) {
+          // Numeric prefix (e.g., "1" matches "101", "123", etc.)
+          return id.startsWith(prefix);
+        } else {
+          // Letter prefix (e.g., "A" matches "A02", "A15", etc.)
+          return id.startsWith(prefix);
+        }
+      });
+
+      if (matchesLine) {
+        stations.push(station as Station);
+      }
     });
 
-    return Object.values(stations).slice(0, 20); // Limit for performance
+    // Sort stations by name for easier browsing
+    return stations.sort((a, b) => a.stop_name.localeCompare(b.stop_name));
   };
 
   const toggleStation = (baseStationId: string, direction: "N" | "S") => {
@@ -80,12 +113,23 @@ export default function SetupPage() {
     return selectedStations.includes(baseStationId + direction);
   };
 
+  const moveStation = (index: number, direction: "up" | "down") => {
+    setSelectedStations(prev => {
+      const newArr = [...prev];
+      const newIndex = direction === "up" ? index - 1 : index + 1;
+      if (newIndex < 0 || newIndex >= newArr.length) return prev;
+      [newArr[index], newArr[newIndex]] = [newArr[newIndex], newArr[index]];
+      return newArr;
+    });
+  };
+
   const saveConfiguration = () => {
     // Allow saving even with no stations selected (just saving display mode)
     if (selectedStations.length > 0) {
       localStorage.setItem("selectedStations", selectedStations.join(","));
     }
     localStorage.setItem("displayMode", displayMode);
+    localStorage.setItem("zoom", String(zoom));
     setShowSaved(true);
     setTimeout(() => {
       router.push("/");
@@ -114,7 +158,14 @@ export default function SetupPage() {
   if (!selectedLine) {
     // Line selection screen
     return (
-      <div className="min-h-screen p-6 bg-gray-900 text-white">
+      <div className="min-h-screen p-6 bg-gray-900 text-white relative">
+        {/* Save & Close button at top */}
+        <button
+          onClick={saveConfiguration}
+          className="fixed top-4 right-4 bg-green-600 hover:bg-green-700 active:bg-green-500 text-white p-3 rounded-full text-xl font-bold z-10 w-12 h-12 flex items-center justify-center"
+        >
+          ✕
+        </button>
         <div className="max-w-2xl mx-auto">
           <h1 className="text-3xl font-bold mb-8 text-center">Select Subway Line</h1>
 
@@ -167,13 +218,48 @@ export default function SetupPage() {
                 <div className="text-xs font-normal mt-1">480x800</div>
               </button>
             </div>
+
+            <h2 className="text-lg font-semibold mb-4">Zoom Level: {zoom}%</h2>
+            <div className="flex items-center gap-4">
+              <button
+                onClick={() => setZoom(Math.max(50, zoom - 10))}
+                className="bg-gray-700 hover:bg-gray-600 p-4 rounded-lg text-xl font-bold min-w-[60px]"
+              >
+                -
+              </button>
+              <input
+                type="range"
+                min="50"
+                max="200"
+                step="10"
+                value={zoom}
+                onChange={(e) => setZoom(parseInt(e.target.value, 10))}
+                className="flex-1 h-3 bg-gray-700 rounded-lg appearance-none cursor-pointer"
+              />
+              <button
+                onClick={() => setZoom(Math.min(200, zoom + 10))}
+                className="bg-gray-700 hover:bg-gray-600 p-4 rounded-lg text-xl font-bold min-w-[60px]"
+              >
+                +
+              </button>
+            </div>
+            <div className="flex justify-between text-sm text-gray-400 mt-2">
+              <span>50%</span>
+              <button
+                onClick={() => setZoom(100)}
+                className="text-blue-400 hover:text-blue-300"
+              >
+                Reset to 100%
+              </button>
+              <span>200%</span>
+            </div>
           </div>
 
           <div className="mt-4 p-4 bg-gray-800 rounded-lg">
             <h2 className="text-lg font-semibold mb-2">Selected Stations ({selectedStations.length})</h2>
             {selectedStations.length > 0 ? (
-              <div className="text-sm space-y-1">
-                {selectedStations.map(id => {
+              <div className="text-sm space-y-2">
+                {selectedStations.map((id, index) => {
                   const baseId = id.slice(0, -1);
                   const direction = id.slice(-1);
                   const station = stationData[baseId as keyof typeof stationData] as Station | undefined;
@@ -181,13 +267,29 @@ export default function SetupPage() {
                   const directionLabel = direction === 'N' ? 'Northbound' : 'Southbound';
 
                   return (
-                    <div key={id} className="flex justify-between items-center">
-                      <span>{stationName} - {directionLabel}</span>
+                    <div key={id} className="flex items-center gap-2 bg-gray-700 p-2 rounded">
+                      <div className="flex flex-col">
+                        <button
+                          onClick={() => moveStation(index, "up")}
+                          disabled={index === 0}
+                          className={`text-lg leading-none ${index === 0 ? 'text-gray-600' : 'text-gray-300 hover:text-white'}`}
+                        >
+                          ▲
+                        </button>
+                        <button
+                          onClick={() => moveStation(index, "down")}
+                          disabled={index === selectedStations.length - 1}
+                          className={`text-lg leading-none ${index === selectedStations.length - 1 ? 'text-gray-600' : 'text-gray-300 hover:text-white'}`}
+                        >
+                          ▼
+                        </button>
+                      </div>
+                      <span className="flex-1">{stationName} - {directionLabel}</span>
                       <button
                         onClick={() => setSelectedStations(prev => prev.filter(s => s !== id))}
-                        className="text-red-400 hover:text-red-300 px-3 py-1"
+                        className="text-red-400 hover:text-red-300 px-2 py-1 text-lg"
                       >
-                        Remove
+                        ✕
                       </button>
                     </div>
                   );
@@ -218,7 +320,7 @@ export default function SetupPage() {
   }
 
   // Station selection screen
-  const allStations = getStationsForLine(LINE_GROUPS[selectedLine as keyof typeof LINE_GROUPS]);
+  const allStations = getStationsForLine(selectedLine);
 
   // Filter stations based on search query
   const filteredStations = searchQuery.trim()
@@ -228,7 +330,14 @@ export default function SetupPage() {
     : allStations;
 
   return (
-    <div className="min-h-screen p-6 bg-gray-900 text-white">
+    <div className="min-h-screen p-6 bg-gray-900 text-white relative">
+      {/* Save & Close button at top */}
+      <button
+        onClick={saveConfiguration}
+        className="fixed top-4 right-4 bg-green-600 hover:bg-green-700 active:bg-green-500 text-white p-3 rounded-full text-xl font-bold z-10 w-12 h-12 flex items-center justify-center"
+      >
+        ✕
+      </button>
       <div className="max-w-2xl mx-auto">
         <h1 className="text-2xl font-bold mb-2 text-center">{selectedLine} Line Stations</h1>
         <p className="text-center text-gray-400 mb-4">Tap direction to add/remove</p>
