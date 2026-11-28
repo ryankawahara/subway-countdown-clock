@@ -477,7 +477,7 @@ export default function Home() {
                               {northStation?.trains.slice(0, maxTrains).map((train, index) => (
                                 <div
                                   key={index}
-                                  className="flex-1 px-1 rounded bg-gray-700 flex items-stretch gap-1"
+                                  className="px-1 rounded bg-gray-700 flex items-center gap-1"
                                 >
                                   <div className="flex items-center justify-center rounded-full font-bold flex-shrink-0"
                                        style={{
@@ -514,7 +514,7 @@ export default function Home() {
                               {southStation?.trains.slice(0, maxTrains).map((train, index) => (
                                 <div
                                   key={index}
-                                  className="flex-1 px-1 rounded bg-gray-700 flex items-stretch gap-1"
+                                  className="px-1 rounded bg-gray-700 flex items-center gap-1"
                                 >
                                   <div className="flex items-center justify-center rounded-full font-bold flex-shrink-0"
                                        style={{
